@@ -3,7 +3,7 @@ module.exports = function(app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'http://127.0.0.1:8000' || 'https://ikmbackend-production.up.railway.app/',
+      target: 'https://ikmbackend-production.up.railway.app/',
       changeOrigin: true,
       pathRewrite: {'^/api' : ''}
     })
