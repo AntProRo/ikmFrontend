@@ -6,12 +6,12 @@
 create a folder named IKMWEB
 
 # clone this repository inside of your folder
-https://github.com/AntProRo/ikmBackend.git
+https://github.com/AntProRo/ikmFrontend.git
+
+and rename the folder "client" instead of ikmFrontend
 
 # run this line
 npm install
-
-
 
 # and finally
 
