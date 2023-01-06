@@ -63,7 +63,7 @@ const ModalGraphResultSubject = ({
     labels: ["None"],
     datasets: [
       {
-        label: `Subject Coverage: ${SubjectResult?.dataMiner[7]?.subjectSubjectCoverage || 0 } `,
+        label: `Subject Coverage: 0 `,
         data: scoreBarCircle,
         backgroundColor: ["rgba(224, 0, 25, 0.8)"],
       },
@@ -286,7 +286,7 @@ const ModalGraphResultSubject = ({
                         required
                         type="text"
                         placeholder="Subject Coverage"
-                        defaultValue={SubjectResult?.dataMiner[7]?.subjectSubjectCoverage }
+                        defaultValue={SubjectResult?.dataMiner[7]?.subjectSubjectCoverage || 0}
                       />
                     </Form.Group>
                   </Row>
