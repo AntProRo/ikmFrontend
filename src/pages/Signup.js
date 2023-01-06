@@ -1,11 +1,11 @@
 import { connect } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
-import { useState } from "react";
-import { signup} from '../actions/auth';
+import { useEffect, useState } from "react";
+import { signup,actionSuccessAlert,actionFailedAlert} from '../actions/auth';
+import Swal from 'sweetalert2';
 
-const Signup =({signup, isAuthenticated}) => {
+const Signup =({signup, isAuthenticated,actionSuccessAlert,actionFailedAlert,alertSuccess,alertError }) => {
 
-    const [accountCreated,setAccountCreated] =useState(false)
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -21,18 +21,47 @@ const Signup =({signup, isAuthenticated}) => {
    
         if(password === re_password){
         signup(email,name,password,re_password)
-        setAccountCreated(true);
+   ;
         } 
     };
       // Is  the user authenticated?
       // redirect them to the home page
-      if(isAuthenticated) {
+
+      useEffect(()=> {
+        if(alertSuccess){
+          actionSuccessAlert(false);
+          Swal.fire({
+            title: "Check your email",
+            text: `Account created successfully`,
+            icon: "success",
+            confirmButtonText: "Ok",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              return <Navigate to="/login" />;
+            } else {
+              return <Navigate to="/login" />;
+            }
+          });
+        }
+        if(alertError){
+          actionFailedAlert(false);
+          Swal.fire({
+            title: "Ups!!!",
+            text: `Something was wrong, email already in use or try again!!`,
+            icon: "error",
+            timer: "2000",
+          });
+        }
+      // eslint-disable-next-line import/no-extraneous-dependencies
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      },[alertSuccess,alertError])
+  /*     if(isAuthenticated) {
         return <Navigate to='/'/>
       } 
       if(accountCreated) {
         return <Navigate to='/login'/>
       }
-   
+    */
     return (
         <div className="container mt-5">
         <h1>SignUp</h1>
@@ -106,11 +135,13 @@ const Signup =({signup, isAuthenticated}) => {
 
 const mapStateToProps = state =>({
     //is authenticated
-    isAuthenticated:state.auth.isAuthenticated
+    isAuthenticated:state.auth.isAuthenticated,
+    alertSuccess:state?.auth?.successAlert,
+    alertError: state?.auth?.errorAlert,
 })
 
 
-export default connect(mapStateToProps,{signup})(Signup);
+export default connect(mapStateToProps,{signup,actionSuccessAlert,actionFailedAlert})(Signup);
 
 
 

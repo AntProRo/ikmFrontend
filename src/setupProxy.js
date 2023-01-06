@@ -3,7 +3,7 @@ module.exports = function(app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'https://ikmbackend-production.up.railway.app',
+      target: process.env.REACT_DEVELOPMENT_URL_PROXY_JS,
       changeOrigin: true,
       pathRewrite: {'^/api' : ''}
     })

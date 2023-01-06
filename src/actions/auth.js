@@ -16,7 +16,11 @@ import {
   PASSWORD_RESET_CONFIRM_SUCCESS,
   LOGOUT,
   SPINNER_ACTIVATED,
-  SPINNER_DISABLED
+  SPINNER_DISABLED,
+  ALERT_FAIL_DISABLED,
+  ALERT_FAIL_ACTIVATED,
+  ALERT_SUCCESS_ACTIVATED,
+  ALERT_SUCCESS_DISABLED
 } from "./types";
 
 
@@ -58,6 +62,19 @@ export const checkAuthenticated = () => async (dispatch) => {
   }
 };
 
+export const spinnerLoading = (status) => (dispatch) => {
+  if (status){
+    dispatch({
+      type: SPINNER_ACTIVATED,
+    });
+  }
+  if(!status) {
+    dispatch({
+      type: SPINNER_DISABLED,
+    });
+  }
+};
+
 export const load_user = () => async (dispatch) => {
   if (localStorage.getItem("access")) {
     const config = {
@@ -90,6 +107,21 @@ export const load_user = () => async (dispatch) => {
   }
 };
 
+/* alert success */
+export const actionSuccessAlert = (status) =>async(dispatch)=> {
+  if (status){
+    dispatch({
+      type:ALERT_SUCCESS_ACTIVATED,
+    });
+  }
+  if(!status) {
+    dispatch({
+      type: ALERT_SUCCESS_DISABLED,
+    });
+  }
+
+}
+
 export const login = (email, password) => async (dispatch) => {
   const config = {
     headers: {
@@ -110,6 +142,7 @@ export const login = (email, password) => async (dispatch) => {
       payload: res.data,
     });
     dispatch(load_user());
+    dispatch(actionSuccessAlert(true));
   } catch (err) {
     dispatch({
       type: LOGIN_FAIL,
@@ -200,18 +233,19 @@ export const logout = () => (dispatch) => {
   });
 };
 
-export const spinnerLoading = (status) => (dispatch) => {
-  if (status){
+/* alert error */
+export const actionFailedAlert =(status) =>(dispatch)=> {
+  if(status){
     dispatch({
-      type: SPINNER_ACTIVATED,
-    });
+      type:ALERT_FAIL_ACTIVATED,
+    })
   }
-  if(!status) {
+  if(!status){
     dispatch({
-      type: SPINNER_DISABLED,
-    });
+      type:ALERT_FAIL_DISABLED,
+    })
   }
-};
+}
 
 
 //THEN EXPORT TO REDUCES AUTH

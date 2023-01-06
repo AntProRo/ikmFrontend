@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route,Navigate } from "react-router-dom";
 import Activate from "./Activate";
 import Dashboard from "./Dashboard";
 import Home from "./Home";
@@ -35,9 +35,9 @@ const MainPages = ({ isAuthenticated }) => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" />:<Login />} />
+      <Route path="/signup" element={isAuthenticated ? <Navigate to="/dashboard" />: <Signup />} />
+      <Route path="/reset-password" element={isAuthenticated ? <Navigate to="/dashboard" />: <ResetPassword />} />
       <Route
         path="/dashboard"
         element={!isAuthenticated ?  <NotFound/>  : <Dashboard />} 

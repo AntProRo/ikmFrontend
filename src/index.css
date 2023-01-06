@@ -22,7 +22,7 @@ body {
 }
 .upload-files-container {
 	background-color: #f7fff7;
-	width: 420px;
+	width: 600px;
 	padding: 30px 60px;
 	border-radius: 40px;
 	display: flex;
@@ -32,11 +32,11 @@ body {
 	box-shadow: rgba(0, 0, 0, 0.24) 0px 10px 20px, rgba(0, 0, 0, 0.28) 0px 6px 6px;
 }
 .drag-file-area {
-	border: 2px dashed #fed89b;
+	border: 2px dashed #2b7cce;
 	border-radius: 40px;
 	margin: 10px 0 15px;
 	padding: 30px 50px;
-	width: 350px;
+	width: 500px;
 	text-align: center;
 }
 .drag-file-area .upload-icon {
@@ -91,7 +91,7 @@ body {
 }
 .file-block {
 	color: #f7fff7;
-	background-color: #fed89b;
+	background-color: #9be5fe;
 	transition: all 1s;
 	width: 390px;
 	position: relative;
@@ -131,7 +131,7 @@ body {
 }
 .upload-button {
 	font-family: "Montserrat";
-	background-color: #fed89b;
+	background-color: #3062cd;
 	color: #f7fff7;
 	display: flex;
 	align-items: center;
@@ -143,6 +143,6 @@ body {
 	cursor: pointer;
 }
 .upload-button:hover {
-	background-color: #fed89b; /* Green */
+	background-color: #517bd4; /* Green */
 	color: white;
 }

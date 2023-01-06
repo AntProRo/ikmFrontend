@@ -1,12 +1,12 @@
 import { Navigate, useParams } from "react-router-dom";
 import { connect } from "react-redux";
-import { useState } from "react";
-import { reset_password_confirm } from "../actions/auth";
+import { useEffect, useState } from "react";
+import { reset_password_confirm,actionSuccessAlert,actionFailedAlert } from "../actions/auth";
+import Swal from 'sweetalert2';
 
-const ResetPasswordConfirm = ({ reset_password_confirm }) => {
+const ResetPasswordConfirm = ({ reset_password_confirm,actionSuccessAlert,actionFailedAlert,alertSuccess,errorAlert }) => {
   const routeParams = useParams();
 
-  const [requestSent, setRequestSent] = useState(false);
   const [formData, setFormData] = useState({
     new_password: "",
     re_new_password: "",
@@ -21,16 +21,46 @@ const ResetPasswordConfirm = ({ reset_password_confirm }) => {
 
     //Reset password
     reset_password_confirm(uid, token, new_password, re_new_password);
-    setRequestSent(true);
+  
   };
   // Is  the user authenticated?
   // redirect them to the home page
-  if (requestSent) {
-    return <Navigate to="/" />;
-  }
+
+  useEffect(() => {
+  
+    if (alertSuccess) {
+      actionSuccessAlert(false);
+      Swal.fire({
+        title: "New password reset !!",
+        text: `Done`,
+        icon: "success",
+        confirmButtonText: "Ok",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          return <Navigate to="/login" />;
+        } else {
+          return <Navigate to="/login" />;
+        }
+      });
+    }
+
+    if(errorAlert){
+      actionFailedAlert(false)
+      Swal.fire({
+        title: "Ups!!!",
+        text: `Something was wrong`,
+        icon: "error",
+        timer: "2000",
+      });
+    }
+  // eslint-disable-next-line import/no-extraneous-dependencies
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [alertSuccess,errorAlert]);
 
   return (
     <div className="container mt-5">
+      <h1>Reset password </h1>
+      <p>Create a new password</p>
       <form onSubmit={(e) => onSubmit(e)}>
         <div className="form-group">
           <input
@@ -66,4 +96,9 @@ const ResetPasswordConfirm = ({ reset_password_confirm }) => {
   );
 };
 
-export default connect(null, { reset_password_confirm })(ResetPasswordConfirm);
+const mapStateToProps =(state)=> ({
+  alertSuccess:state?.auth?.successAlert,
+  errorAlert: state?.auth?.errorAlert,
+})
+
+export default connect(mapStateToProps, { reset_password_confirm,actionSuccessAlert,actionFailedAlert })(ResetPasswordConfirm);

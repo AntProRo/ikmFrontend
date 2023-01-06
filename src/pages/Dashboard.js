@@ -1,10 +1,18 @@
-import {  useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import Swal from "sweetalert2";
 import { connect } from "react-redux";
-import { spinnerLoading } from "../actions/auth";
+import { spinnerLoading,actionSuccessAlert } from "../actions/auth";
 import { postDocument } from "../actions/uploadPDF";
 import ModalGraphResultSubject from "../components/modalGraph/ModalGraphResultSubject";
 
-const Dashboard = ({ loading,SubjectResult, postDocument,spinnerLoading  }) => {
+const Dashboard = ({
+  SubjectResult,
+  postDocument,
+  spinnerLoading,
+  loading,
+  actionSuccessAlert,
+  alertSuccess
+}) => {
   const inputFile = useRef(null);
   /* Modal */
   const [modalShowResult, setModalShowResult] = useState(false);
@@ -20,20 +28,50 @@ const Dashboard = ({ loading,SubjectResult, postDocument,spinnerLoading  }) => {
 
   const submit = () => {
     try {
-      
       let formData = new FormData();
       formData.append("upload", uploadFile);
       postDocument(formData);
-      spinnerLoading(true)
-      
+      spinnerLoading(true);
     } catch (err) {
       console.log(err);
     }
   };
 
-  useEffect(() => {
-    setName(SubjectResult?.name || null);
-  }, [SubjectResult,name]);
+  useEffect(
+    () => {
+      /* ERROR DOCUMENT VALIDATION */
+      setName(SubjectResult?.name || null);
+
+      if (SubjectResult === "fail") {
+        Swal.fire({
+          title: "Something was wrong with this document!",
+          text: `Structure of file not supported`,
+          icon: "error",
+          confirmButtonText: "Ok",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload(false);
+          } else {
+            window.location.reload(false);
+          }
+        });
+      }
+      /* LOGIN STARTED */
+      if (alertSuccess) {
+        actionSuccessAlert(false)
+        Swal.fire({
+          title: "Welcome !!!",
+          text: ``,
+          icon: "success",
+          timer: "1500",
+        })
+      }
+
+    },
+    // eslint-disable-next-line import/no-extraneous-dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [SubjectResult, name,alertSuccess],
+  );
 
   return (
     <>
@@ -63,30 +101,37 @@ const Dashboard = ({ loading,SubjectResult, postDocument,spinnerLoading  }) => {
 
           {uploadFile ? (
             <>
-              <button type="button"  onClick= {()=> {setModalShowResult(true);submit();}} className="upload-button">
+              <button
+                type="button"
+                onClick={() => {
+                  setModalShowResult(true);
+                  submit();
+                }}
+                className="upload-button"
+              >
                 {" "}
                 Run{" "}
               </button>
             </>
           ) : null}
 
-
-          { name ? (
+          {name ? (
             <>
-              <button type="button" onClick={() => setModalShowResult(true)} className="upload-button">
-                See Graph of {name}
+              <button
+                type="button"
+                onClick={() => setModalShowResult(true)}
+                className="upload-button"
+              >
+                See graph of {name}
               </button>
-
-              
-              
-             
             </>
           ) : null}
         </div>
       </form>
       <ModalGraphResultSubject
-                show={modalShowResult}
-                onHide={() => setModalShowResult(false)} />
+        show={modalShowResult}
+        onHide={() => setModalShowResult(false)}
+      />
     </>
   );
 };
@@ -96,6 +141,10 @@ const mapStateToProps = (state) => ({
   token: state.auth.access,
   loading: state?.loadingSpinner,
   SubjectResult: state?.uploadDocument?.data,
+  // login is authenticated
+  alertSuccess:state?.auth?.successAlert,
 });
 
-export default connect(mapStateToProps, { postDocument,spinnerLoading })(Dashboard);
+export default connect(mapStateToProps, { postDocument, spinnerLoading,actionSuccessAlert})(
+  Dashboard
+);

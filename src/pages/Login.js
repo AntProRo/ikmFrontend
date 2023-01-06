@@ -1,10 +1,23 @@
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { useState } from "react";
-import { login,spinnerLoading } from '../actions/auth';
+import { useEffect, useState } from "react";
+import {
+  login,
+  spinnerLoading,
+  actionFailedAlert,
+ 
+} from "../actions/auth";
+import Swal from "sweetalert2";
+
+const Login = ({
+  login,
+  isAuthenticated,
+  errorAlert,
+  actionFailedAlert,
 
 
-const Login = ({login, isAuthenticated,spinnerLoading,spinnerActivated}) => {
+
+}) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -15,19 +28,29 @@ const Login = ({login, isAuthenticated,spinnerLoading,spinnerActivated}) => {
   const onSubmit = (e) => {
     e.preventDefault();
     //login
-    login(email,password)
+    login(email, password);
   };
 
-  
   // Is  the user authenticated?
   // redirect them to the home page
-   if(isAuthenticated) {
-    return <Navigate to='/'/>
-  }
 
- 
+  useEffect(() => {
+    if (errorAlert) {
+      actionFailedAlert(false);
+      Swal.fire({
+        title: "Try again !!!",
+        text: `Password not valid or email not verified`,
+        icon: "error",
+        timer: "2000",
+      });
+    }
+    // eslint-disable-next-line import/no-extraneous-dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorAlert]);
+
+
   return (
-    <div  className="container mt-5">
+    <div className="container mt-5">
       <h1>Sign In</h1>
       <p>Sing into your Account</p>
       <form onSubmit={(e) => onSubmit(e)}>
@@ -42,7 +65,7 @@ const Login = ({login, isAuthenticated,spinnerLoading,spinnerActivated}) => {
             required
           />
         </div>
-    <br/>
+        <br />
         <div className="form-group">
           <input
             className="form-control"
@@ -54,26 +77,31 @@ const Login = ({login, isAuthenticated,spinnerLoading,spinnerActivated}) => {
             required
           />
         </div>
-        <br/>
+        <br />
         <button className="btn btn-primary" type="submit">
           {" "}
           Login
         </button>
       </form>
       <p className="mt-3">
-            Don't have a account? <Link to='/signup'>Sign up</Link>
-        </p>
-        <p className="mt-3">
-            Forgot your Password? <Link to='/reset-password'>Reset Password</Link>
-        </p>
+        Don't have a account? <Link to="/signup">Sign up</Link>
+      </p>
+      <p className="mt-3">
+        Forgot your Password? <Link to="/reset-password">Reset Password</Link>
+      </p>
     </div>
   );
 };
 
-const mapStateToProps = state =>({
-    //is authenticated
-    isAuthenticated:state.auth.isAuthenticated,
-    spinnerActivated:state.loadingSpinner.spinnerActivated
-})
+const mapStateToProps = (state) => ({
+  //is authenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  errorAlert: state.auth.errorAlert,
+  spinnerActivated: state.loadingSpinner.spinnerActivated,
+});
 
-export default connect(mapStateToProps,{login,spinnerLoading})(Login);
+export default connect(mapStateToProps, {
+  login,
+  actionFailedAlert,
+  spinnerLoading
+})(Login);

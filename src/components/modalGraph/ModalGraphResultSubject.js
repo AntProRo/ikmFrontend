@@ -1,4 +1,4 @@
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Col, Form,  Modal, Row } from "react-bootstrap";
 import { connect } from "react-redux";
 import {
   Chart as ChartJS,
@@ -24,7 +24,6 @@ const initialState = {
   Score: 0,
   Percentile: 0,
   SubjectCoverage: 0,
-
 };
 
 const initialState2 = [
@@ -125,14 +124,14 @@ const ModalGraphResultSubject = ({
 
   useEffect(() => {
     setScoreBar(
-      SubjectResult?.scoreBar.map((item, index) => {
+      SubjectResult?.scoreBar?.map((item, index) => {
         let result = (item / 51923.5) * 100;
         return result;
       })
     );
 
     setLabels(
-      SubjectResult?.concepts.map((item, index) => {
+      SubjectResult?.concepts?.map((item, index) => {
         return item.value;
       })
     );
@@ -145,11 +144,8 @@ const ModalGraphResultSubject = ({
     });
     valuesCircle = valuesCircle.filter((item) => item !== 0);
     setScoreBarCircle(valuesCircle);
-
-
     // eslint-disable-next-line
-    let object = SubjectResult?.dataMiner?.reduce((obj, item) => (obj[item.label] = item.value, obj) ,{});
-   
+    let object = SubjectResult?.dataMiner?.reduce((obj, item) => ((obj[item.label] = item.value), obj),{});
 
     setDataMiner(object);
     setFooterLevel(SubjectResult?.FooterLevel);
@@ -224,32 +220,114 @@ const ModalGraphResultSubject = ({
             <>
               <Form id="formTemplate">
                 <Modal.Header closeButton>
-                  <Modal.Title>USER SCORE: </Modal.Title>
+                  <Modal.Title>User Result </Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
-                  <h6>
-                    Client: {dataMiner.Client}, Date: {dataMiner.Date}, Subject:{" "}
-                    {dataMiner.Subject}
-                  </h6>
-                  <h6>ID: {dataMiner.ID}. </h6>
-                  <h6>
-                    Name: {SubjectResult?.name}, Score: {dataMiner.Score}.
-                  </h6>
-                  <h6>Percentile: {dataMiner.Percentile}.</h6>
-                  <Bar options={optionsBar} data={data} />
+                <Modal.Body
+                  style={{
+                    maxHeight: "calc(100vh - 210px)",
+                    overflowY: "auto",
+                  }}
+                >
+                  <Row className="mb-3">
+                    <Form.Group as={Col} md="4" controlId="validationCustom02">
+                      <Form.Label><b>Name:</b></Form.Label>
+                      <Form.Control
+                        required
+                        type="text"
+                        placeholder="Name"
+                        defaultValue={SubjectResult?.name}
+                      />
+                      <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                    </Form.Group>
 
-                  <div>
-                    Work Speed/Accuracy:{" "}
-                    <h6 className="text-primary">
-                      {footerLevel ? footerLevel[0].label : null}
-                    </h6>
-                  </div>
-                  <div>
-                    Application Ability :{" "}
-                    <h6 className="text-primary">
-                      {footerLevel ? footerLevel[1].label : null}
-                    </h6>
-                  </div>
+                    <Form.Group as={Col} md="4" controlId="validationCustom02">
+                      <Form.Label><b>ID:</b></Form.Label>
+                      <Form.Control
+                        required
+                        type="text"
+                        placeholder="ID"
+                        defaultValue={dataMiner.ID}
+                      />
+                    </Form.Group>
+
+                    <Form.Group as={Col} md="4" controlId="validationCustom02">
+                      <Form.Label><b>Date:</b></Form.Label>
+                      <Form.Control
+                        required
+                        type="text"
+                        placeholder="Date"
+                        defaultValue={dataMiner.Date}
+                      />
+                    </Form.Group>
+                    </Row>
+                    <Row className="mb-3">
+
+                    <Form.Group as={Col} md="7" controlId="validationCustom02">
+                      <Form.Label><b>Subject:</b></Form.Label>
+                      <Form.Control
+                        required
+                        type="text"
+                        placeholder="Date"
+                        defaultValue={dataMiner.Subject}
+                      />
+                    </Form.Group>
+
+                    <Form.Group as={Col} md="4" controlId="validationCustom02">
+                      <Form.Label><b>Score:</b></Form.Label>
+                      <Form.Control
+                        required
+                        type="text"
+                        placeholder="Score"
+                        defaultValue={dataMiner.Score}
+                      />
+                    </Form.Group>
+
+                    </Row>
+
+                    <Row className="mb-3">
+                    <Form.Group as={Col} md="4" controlId="validationCustom01">
+                      <Form.Label><b>Client: </b></Form.Label>
+                      <Form.Control
+                        required
+                        type="text"
+                        placeholder="Client"
+                        defaultValue={dataMiner.Client}
+                      />
+                    </Form.Group>
+
+                    <Form.Group as={Col} md="4" controlId="validationCustom02">
+                      <Form.Label><b>Percentile:</b></Form.Label>
+                      <Form.Control
+                        required
+                        type="text"
+                        placeholder="Percentile"
+                        defaultValue={dataMiner.Percentile }
+                      />
+                    </Form.Group>
+                  </Row>
+
+                  <Row className="mb-3">
+                    <Form.Group as={Col} md="4" controlId="validationCustom01">
+                      <Form.Label><b>Work Speed/Accuracy: </b></Form.Label>
+                      <Form.Control
+                        required
+                        type="text"
+                        placeholder="Work Speed/Accuracy"
+                        defaultValue={footerLevel ? footerLevel[0].label : null}
+                      />
+                    </Form.Group>
+
+                    <Form.Group as={Col} md="4" controlId="validationCustom02">
+                      <Form.Label><b>Application Ability :</b> </Form.Label>
+                      <Form.Control
+                        required
+                        type="text"
+                        placeholder="Application Ability"
+                        defaultValue={footerLevel ? footerLevel[1].label : null}
+                      />
+                    </Form.Group>
+                  </Row>
+                  <Bar options={optionsBar} data={data} />
 
                   <PolarArea options={optionsArea} data={dataCircle} />
                 </Modal.Body>
@@ -260,6 +338,9 @@ const ModalGraphResultSubject = ({
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Export Data
           </Button>
         </Modal.Footer>
       </Modal>

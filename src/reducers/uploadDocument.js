@@ -15,7 +15,7 @@ export default function uploadDocument(state = initialState, action) {
     case DOCUMENT_FAIL:
       return {
         ...state,
-        data: {},
+        data: "fail",
       };
     default:
       return state;

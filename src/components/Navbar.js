@@ -12,13 +12,12 @@ const Navbar = ({ logout, isAuthenticated }) => {
         </Link>
       </li>
 
-      <li className="nav-item dropdown">
+      <li className="nav-item ">
         <Link
-          className="nav-link dropdown-toggle"
+          className="nav-link"
           to="/signup"
-          id="navbarDropdown"
+          id="navbarHeader"
           role="button"
-          data-toggle="dropdown"
           aria-haspopup="true"
           aria-expanded="false"
         >

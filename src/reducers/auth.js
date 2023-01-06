@@ -14,6 +14,10 @@ import {
   PASSWORD_RESET_CONFIRM_FAIL,
   PASSWORD_RESET_CONFIRM_SUCCESS,
   LOGOUT,
+  ALERT_FAIL_ACTIVATED,
+  ALERT_FAIL_DISABLED,
+  ALERT_SUCCESS_ACTIVATED,
+  ALERT_SUCCESS_DISABLED,
 } from "../actions/types";
 
 const initialState = {
@@ -21,6 +25,8 @@ const initialState = {
   refresh: localStorage.getItem("refresh"),
   isAuthenticated: null,
   user: null,
+  errorAlert: false,
+  successAlert: false,
 };
 export default function auth(state = initialState, action) {
   const { type, payload } = action;
@@ -33,7 +39,8 @@ export default function auth(state = initialState, action) {
     case SIGNUP_SUCCESS:
       return {
         ...state,
-        isAuthenticated:false
+        isAuthenticated: false,
+        successAlert: true,
       };
     case LOGIN_SUCCESS:
       localStorage.setItem("access", payload.access);
@@ -59,8 +66,36 @@ export default function auth(state = initialState, action) {
         ...state,
         isAuthenticated: false,
       };
+    case PASSWORD_RESET_CONFIRM_SUCCESS:
+    case ACTIVATION_SUCCESS:
+    case PASSWORD_RESET_SUCCESS:
+    case ALERT_SUCCESS_ACTIVATED: {
+      return {
+        ...state,
+        successAlert: true,
+      };
+    }
+    case ALERT_SUCCESS_DISABLED: {
+      return {
+        ...state,
+        successAlert: false,
+      };
+    }
+    case ALERT_FAIL_DISABLED:
+      return {
+        ...state,
+        errorAlert: false,
+      };
+    case PASSWORD_RESET_CONFIRM_FAIL:
+    case ACTIVATION_FAIL:
+    case PASSWORD_RESET_FAIL:
     case SIGNUP_FAIL:
     case LOGIN_FAIL:
+    case ALERT_FAIL_ACTIVATED:
+      return {
+        ...state,
+        errorAlert: true,
+      };
     case LOGOUT:
       localStorage.removeItem("access");
       localStorage.removeItem("refresh");
@@ -71,15 +106,11 @@ export default function auth(state = initialState, action) {
         isAuthenticated: false,
         user: null,
       };
-    case PASSWORD_RESET_FAIL:
-    case PASSWORD_RESET_SUCCESS:
-    case PASSWORD_RESET_CONFIRM_FAIL:
-    case PASSWORD_RESET_CONFIRM_SUCCESS:
-    case ACTIVATION_SUCCESS:
-    case ACTIVATION_FAIL:
-      return {
+  
+/*     case PASSWORD_RESET_CONFIRM_FAIL:
+        return {
         ...state,
-      };
+      }; */
     default:
       return state;
   }
