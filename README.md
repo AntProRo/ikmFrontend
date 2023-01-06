@@ -24,6 +24,12 @@ https://railway.app/project/e2f4cb1d-7d26-4120-a5fb-c74e2391f601/service/8799604
 local enviroment
 ### `npm start`
 
+
+### if you have problems you could add  or change .env
+
+REACT_APP_API_URL =  'http://localhost:8000'
+REACT_DEVELOPMENT_URL_PROXY_JS=  'http://127.0.0.1:8000' 
+
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
