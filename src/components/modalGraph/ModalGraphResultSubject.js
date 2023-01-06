@@ -22,7 +22,7 @@ const initialState = {
   Subject: "",
   Client: "",
   Score: 0,
-  Percentile: 0,
+  Percentile: "",
   SubjectCoverage: 0,
 };
 
