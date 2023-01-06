@@ -127,7 +127,7 @@ const ModalGraphResultSubject = ({
     });
     valuesCircle = valuesCircle.filter((item) => item !== 0);
     setScoreBarCircle(valuesCircle);
-    
+    console.log(SubjectResult)
     spinnerLoading(false);
     // eslint-disable-next-line
     // eslint-disable-next-line react-hooks/exhaustive-deps
