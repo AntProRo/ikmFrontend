@@ -15,21 +15,7 @@ import { Bar, PolarArea } from "react-chartjs-2";
 import { useEffect, useRef, useState } from "react";
 import Loading from "../LoadingElement/Loading";
 import { spinnerLoading } from "../../actions/auth";
-const initialState = {
-  AssessmentResultFor: "",
-  ID: "",
-  Date: "",
-  Subject: "",
-  Client: "",
-  Score: 0,
-  Percentile: "",
-  SubjectCoverage: 0,
-};
 
-const initialState2 = [
-  { label: "", context: "Work Speed/Accuracy" },
-  { label: "", context: "Application Ability" },
-];
 const ModalGraphResultSubject = ({
   show,
   onHide,
@@ -58,11 +44,8 @@ const ModalGraphResultSubject = ({
   const [scoreBar, setScoreBar] = useState([]);
   /* Circle */
   const [scoreBarCircle, setScoreBarCircle] = useState([]);
-  /* Data Miner Labels Subject*/
-  const [dataMiner, setDataMiner] = useState(initialState);
 
-  /* Footer Level */
-  const [footerLevel, setFooterLevel] = useState(initialState2);
+
   /* Set data for Bar graph */
   const [data, setData] = useState({
     labels: labels,
@@ -80,7 +63,7 @@ const ModalGraphResultSubject = ({
     labels: ["None"],
     datasets: [
       {
-        label: { "Subject Coverage": dataMiner.SubjectCoverage },
+        label: `Subject Coverage: ${SubjectResult?.dataMiner[7]?.subjectSubjectCoverage || 0 } `,
         data: scoreBarCircle,
         backgroundColor: ["rgba(224, 0, 25, 0.8)"],
       },
@@ -144,18 +127,9 @@ const ModalGraphResultSubject = ({
     });
     valuesCircle = valuesCircle.filter((item) => item !== 0);
     setScoreBarCircle(valuesCircle);
-    // eslint-disable-next-line
-    let object = SubjectResult?.dataMiner?.reduce((obj, item) => ((obj[item.label] = item.value), obj),{});
-
-    setDataMiner(object);
-    setFooterLevel(SubjectResult?.FooterLevel);
-
+    
     spinnerLoading(false);
-
-    if (SubjectResult === null) {
-      setDataMiner({});
-    }
-
+    // eslint-disable-next-line
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [SubjectResult]);
 
@@ -177,7 +151,7 @@ const ModalGraphResultSubject = ({
           labels: ["Week", "Proficient", "Strong"],
           datasets: [
             {
-              label: `Subject Coverage, ${dataMiner.SubjectCoverage}, This area`,
+              label: `Subject Coverage, ${SubjectResult?.dataMiner[7]?.subjectSubjectCoverage || 0 }, This area`,
               data: scoreBarCircle,
 
               backgroundColor: [
@@ -192,7 +166,7 @@ const ModalGraphResultSubject = ({
           labels: ["Week", "Proficient"],
           datasets: [
             {
-              label: `Subject Coverage: ${dataMiner.SubjectCoverage},This area`,
+              label: `Subject Coverage: ${SubjectResult?.dataMiner[7]?.subjectSubjectCoverage  || 0 },This area`,
               data: scoreBarCircle,
 
               backgroundColor: [
@@ -202,12 +176,13 @@ const ModalGraphResultSubject = ({
             },
           ],
         });
-  }, [labels, scoreBar, scoreBarCircle, dataMiner]);
+  }, [labels, scoreBar, scoreBarCircle,SubjectResult]);
 
   const handleClose = () => {
     onHide();
   };
 
+  
   return (
     <>
       <Modal show={show} onHide={handleClose} size="lg">
@@ -246,7 +221,7 @@ const ModalGraphResultSubject = ({
                         required
                         type="text"
                         placeholder="ID"
-                        defaultValue={dataMiner.ID}
+                        defaultValue={SubjectResult?.dataMiner[1]?.subjectId}
                       />
                     </Form.Group>
 
@@ -256,7 +231,7 @@ const ModalGraphResultSubject = ({
                         required
                         type="text"
                         placeholder="Date"
-                        defaultValue={dataMiner.Date}
+                        defaultValue={SubjectResult?.dataMiner[2]?.subjectDate}
                       />
                     </Form.Group>
                     </Row>
@@ -267,8 +242,8 @@ const ModalGraphResultSubject = ({
                       <Form.Control
                         required
                         type="text"
-                        placeholder="Date"
-                        defaultValue={dataMiner.Subject}
+                        placeholder="Subject"
+                        defaultValue={SubjectResult?.dataMiner[3]?.subjectInterViewName}
                       />
                     </Form.Group>
 
@@ -278,7 +253,7 @@ const ModalGraphResultSubject = ({
                         required
                         type="text"
                         placeholder="Score"
-                        defaultValue={dataMiner.Score}
+                        defaultValue={SubjectResult?.dataMiner[5]?.subjectScore}
                       />
                     </Form.Group>
 
@@ -291,7 +266,7 @@ const ModalGraphResultSubject = ({
                         required
                         type="text"
                         placeholder="Client"
-                        defaultValue={dataMiner.Client}
+                        defaultValue={SubjectResult?.dataMiner[4]?.subjectClient}
                       />
                     </Form.Group>
 
@@ -301,7 +276,17 @@ const ModalGraphResultSubject = ({
                         required
                         type="text"
                         placeholder="Percentile"
-                        defaultValue={dataMiner.Percentile }
+                        defaultValue={SubjectResult?.dataMiner[6]?.subjectPercentile }
+                      />
+                    </Form.Group>
+
+                    <Form.Group as={Col} md="4" controlId="validationCustom02">
+                      <Form.Label><b>Subject Coverage:</b></Form.Label>
+                      <Form.Control
+                        required
+                        type="text"
+                        placeholder="Subject Coverage"
+                        defaultValue={SubjectResult?.dataMiner[7]?.subjectSubjectCoverage }
                       />
                     </Form.Group>
                   </Row>
@@ -313,7 +298,7 @@ const ModalGraphResultSubject = ({
                         required
                         type="text"
                         placeholder="Work Speed/Accuracy"
-                        defaultValue={footerLevel ? footerLevel[0].label : null}
+                        defaultValue={SubjectResult?.FooterLevel[0]?.value}
                       />
                     </Form.Group>
 
@@ -323,13 +308,15 @@ const ModalGraphResultSubject = ({
                         required
                         type="text"
                         placeholder="Application Ability"
-                        defaultValue={footerLevel ? footerLevel[1].label : null}
+                        defaultValue={SubjectResult?.FooterLevel[1]?.value}
                       />
                     </Form.Group>
                   </Row>
                   <Bar options={optionsBar} data={data} />
 
                   <PolarArea options={optionsArea} data={dataCircle} />
+
+                  
                 </Modal.Body>
               </Form>
             </>

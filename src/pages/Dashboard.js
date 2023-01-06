@@ -5,6 +5,9 @@ import { spinnerLoading,actionSuccessAlert } from "../actions/auth";
 import { postDocument } from "../actions/uploadPDF";
 import ModalGraphResultSubject from "../components/modalGraph/ModalGraphResultSubject";
 
+
+
+
 const Dashboard = ({
   SubjectResult,
   postDocument,
@@ -19,6 +22,7 @@ const Dashboard = ({
   const [name, setName] = useState(null);
   const [uploadFile, setUploadFile] = useState(null);
 
+
   const onButtonClick = (e) => {
     e.preventDefault();
     const file = e.target.files[0];
@@ -32,6 +36,7 @@ const Dashboard = ({
       formData.append("upload", uploadFile);
       postDocument(formData);
       spinnerLoading(true);
+      setModalShowResult(true);
     } catch (err) {
       console.log(err);
     }
@@ -41,7 +46,8 @@ const Dashboard = ({
     () => {
       /* ERROR DOCUMENT VALIDATION */
       setName(SubjectResult?.name || null);
-
+     
+      
       if (SubjectResult === "fail") {
         Swal.fire({
           title: "Something was wrong with this document!",
@@ -104,8 +110,8 @@ const Dashboard = ({
               <button
                 type="button"
                 onClick={() => {
-                  setModalShowResult(true);
                   submit();
+                  
                 }}
                 className="upload-button"
               >
@@ -129,6 +135,7 @@ const Dashboard = ({
         </div>
       </form>
       <ModalGraphResultSubject
+ 
         show={modalShowResult}
         onHide={() => setModalShowResult(false)}
       />
