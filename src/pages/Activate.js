@@ -1,10 +1,15 @@
 import { Navigate, useParams } from "react-router-dom";
 import { connect } from "react-redux";
-import { useState } from "react";
-import { verifyAccount } from "../actions/auth";
+import Swal from "sweetalert2";
+import { useEffect} from "react";
+import { verifyAccount,actionSuccessAlert,
+  actionFailedAlert } from "../actions/auth";
 
-const Activate = ({ verifyAccount }) => {
-  const [verified, setVerified] = useState(false);
+const Activate = ({ verifyAccount,successAlert,
+  errorAlert,
+  actionFailedAlert,
+  actionSuccessAlert, }) => {
+ 
   const routeParams = useParams();
 
   const onSubmit = (e) => {
@@ -12,13 +17,40 @@ const Activate = ({ verifyAccount }) => {
     const token = routeParams.token;
 
     verifyAccount(uid, token);
-    setVerified(true)
+  
   };
   // Is  the user verified?
   // redirect them to the home page
-  if (verified) {
+  useEffect(()=>{
+    if (successAlert) {
+      actionSuccessAlert(false);
+      Swal.fire({
+        title: "Account Activated!",
+        text: ``,
+        icon: "success",
+        confirmButtonText: "Ok",
+        timer: "3000",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          return <Navigate to="/" />;
+        } else {
+          return <Navigate to="/" />;
+        }
+      });
+    }
+    if (errorAlert) {
+      actionFailedAlert(false);
+      Swal.fire({
+        title: "Server Error !!!",
+        text: `Contact with IT support`,
+        icon: "error",
+        timer: "2000",
+      });
+    }
+  },[errorAlert,successAlert,actionFailedAlert,actionSuccessAlert])
+/*   if (verified) {
     return <Navigate to="/" />;
-  }
+  } */
   return (
     <div className="container mt-5">
       <h1>Verify Account</h1>
@@ -35,6 +67,9 @@ const Activate = ({ verifyAccount }) => {
 const mapStateToProps = (state) => ({
   //is authenticated
   isAuthenticated: state.auth.isAuthenticated,
+  errorAlert: state?.auth?.errorAlert,
+  successAlert: state?.auth?.successAlert,
 });
 
-export default connect(mapStateToProps, { verifyAccount })(Activate);
+export default connect(mapStateToProps, { verifyAccount,actionSuccessAlert,
+  actionFailedAlert })(Activate);
