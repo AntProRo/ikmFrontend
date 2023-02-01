@@ -9,6 +9,8 @@ import Signup from "./Signup";
 import { connect } from "react-redux";
 import NotFound from "./NotFound";
 import { useEffect, useState } from "react";
+import Candidates from "./Candidates";
+import Variables from "./Variables";
 
 
 const MainPages = ({ isAuthenticated }) => {
@@ -38,11 +40,9 @@ const MainPages = ({ isAuthenticated }) => {
       <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" />:<Login />} />
       <Route path="/signup" element={isAuthenticated ? <Navigate to="/dashboard" />: <Signup />} />
       <Route path="/reset-password" element={isAuthenticated ? <Navigate to="/dashboard" />: <ResetPassword />} />
-      <Route
-        path="/dashboard"
-        element={!isAuthenticated ?  <NotFound/>  : <Dashboard />} 
-      
-      />
+      <Route path="/dashboard" element={!isAuthenticated ?  <NotFound/> : <Dashboard />} />
+      <Route path="/my-candidates" element={!isAuthenticated ?  <NotFound/> : <Candidates />} />
+      <Route path="/my-variables" element={!isAuthenticated ?  <NotFound/> : <Variables />} />
       <Route
         path="/password/reset/confirm/:uid/:token"
         element={<ResetPasswordConfirm />}

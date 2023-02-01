@@ -2,16 +2,14 @@
 import axios from "axios";
 
 
-export const HttpService = () => {
-
-  const token =  localStorage.getItem("access")  
+export const HttpService = () => { 
   const createRequestOptions = 
     (method, url, body) => {
       return {
         url: url,
         method: method,
         headers: {
-          Authorization:`JWT ${token}`,
+          Authorization:`JWT ${localStorage.getItem("access")}`,
           Accept: "application/json", 
         },
         data: body,
@@ -24,7 +22,7 @@ export const HttpService = () => {
         url: url,
         method: method,
         headers: {
-          Authorization:`JWT ${token}`,
+          Authorization:`JWT ${localStorage.getItem("access")}`,
         },
       };
     }

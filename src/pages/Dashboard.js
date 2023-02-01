@@ -48,7 +48,7 @@ const Dashboard = ({
       setName(SubjectResult?.name || null);
      
       
-      if (SubjectResult === "fail") {
+      if (SubjectResult === "Fail_Upload_Document") {
         Swal.fire({
           title: "Something was wrong with this document!",
           text: `Structure of file not supported`,
@@ -66,7 +66,7 @@ const Dashboard = ({
       if (alertSuccess) {
         actionSuccessAlert(false)
         Swal.fire({
-          title: "Welcome !!!",
+          title: "Welcome to dashboard page!!!",
           text: ``,
           icon: "success",
           timer: "1500",

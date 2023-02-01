@@ -8,7 +8,7 @@ const Navbar = ({ logout, isAuthenticated }) => {
     <Fragment>
       <li className="nav-item">
         <Link className="nav-link" to="/login">
-          Login
+        <b>  Login</b>
         </Link>
       </li>
 
@@ -21,7 +21,7 @@ const Navbar = ({ logout, isAuthenticated }) => {
           aria-haspopup="true"
           aria-expanded="false"
         >
-          Sign Up
+        <b>  Sign Up</b>
         </Link>
       </li>
     </Fragment>
@@ -30,23 +30,33 @@ const Navbar = ({ logout, isAuthenticated }) => {
   const authLinks = () => (
     <>
       <li className="nav-item">
-        <Link className="nav-link" to="/" onClick={logout}>
-          Logout
+        <Link className="nav-link" to="/dashboard">
+        <b>  Dashboard</b>
         </Link>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" to="/dashboard">
-          Dashboard
+        <Link className="nav-link" to="/my-candidates">
+        <b> Candidate Results</b>
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link className="nav-link" to="/my-variables">
+        <b> Subject analysis settings</b>
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link className="nav-link" to="/" onClick={logout}>
+          <b>Logout </b>
         </Link>
       </li>
     </>
   );
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <Link className="navbar-brand" to="/">
         {" "}
-        &nbsp; IKM
+        &nbsp; <b>IKM </b>
       </Link>
       <button
         className="navbar-toggler"
@@ -64,7 +74,7 @@ const Navbar = ({ logout, isAuthenticated }) => {
         <ul className="navbar-nav mr-auto">
           <li className="nav-item active">
             <Link className="nav-link" to="/">
-              Home <span className="sr-only">(current)</span>
+             <b> Home </b> <span className="sr-only">(current)</span>
             </Link>
           </li>
           {isAuthenticated ? authLinks() : guestLinks()}
