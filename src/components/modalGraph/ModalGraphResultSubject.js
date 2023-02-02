@@ -106,6 +106,10 @@ const ModalGraphResultSubject = ({
   };
   /*  🔥🔥 Graph Configurations 🔥🔥*/
   useEffect(() => {
+
+    console.log(SubjectResult)
+
+
     setScoreBar(
       SubjectResult?.scoreBar?.map((item, index) => {
         let result = (item / 51923.5) * 100;
@@ -249,6 +253,9 @@ const ModalGraphResultSubject = ({
   const handleClose = () => {
     onHide();
   };
+
+
+
 
   return (
     <>
@@ -449,7 +456,7 @@ const ModalGraphResultSubject = ({
   );
 };
 const mapStateToProps = (state) => ({
-  SubjectResult: state?.uploadDocument?.data || null,
+  SubjectResult: state?.uploadDocument?.dataFile || null,
   loading: state?.loadingSpinner,
   saveResult : state?.uploadDocument?.processResult,
 });

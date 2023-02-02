@@ -25,6 +25,7 @@ import {
   PRACTICE_DELETE_FAIL,
   /* RESTORE STATUS 200 */
   RESTORE_STATUS_200,
+  RESTORE_SKILLS_PRACTICE
 } from "../actions/types";
 
 const initialState = {
@@ -75,7 +76,7 @@ export default function uploadDocument(state = initialState, action) {
       return {
         ...state,
         processResult: null,
-        skillList: null,
+        skillList: [],
 
         /*      data: null, */
       };
@@ -93,12 +94,12 @@ export default function uploadDocument(state = initialState, action) {
     case SKILLS_POST_SUCCESS:
       return {
         ...state,
-        processResult: payload,
+        res: "Saved",
       };
     case SKILLS_POST_FAIL:
       return {
         ...state,
-        processResult: "fail_post_skill",
+        res: "fail_post_skill",
       };
 
     case PRACTICES_SUBJECTS_GET_SUCCESS:
@@ -115,12 +116,12 @@ export default function uploadDocument(state = initialState, action) {
     case SUBJECT_POST_SUCCESS:
       return {
         ...state,
-        processResult: payload,
+        res: "Saved",
       };
     case SUBJECT_POST_FAIL:
       return {
         ...state,
-        processResult: "fail_post_subject",
+      res: "fail_post_subject",
       };
 
     case PRACTICE_DELETE_SUCCESS:
@@ -147,7 +148,13 @@ export default function uploadDocument(state = initialState, action) {
       return {
         ...state,
         res: null,
+       
       };
+      case RESTORE_SKILLS_PRACTICE:
+        return {
+          ...state,
+          skillList: [],
+        }
 
     default:
       return state;

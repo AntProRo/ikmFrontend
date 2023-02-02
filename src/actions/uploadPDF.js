@@ -24,7 +24,8 @@ import {
   PRACTICE_DELETE_SUCCESS,
   PRACTICE_DELETE_FAIL,
 
-  RESTORE_STATUS_200
+  RESTORE_STATUS_200,
+  RESTORE_SKILLS_PRACTICE
 } from "./types";
 import { adminService } from "../httpServices/authService";
 const {
@@ -46,6 +47,14 @@ export const restoreProcess = (status) => async (dispatch) => {
   if (status === null) {
     dispatch({
       type: RESTORE_PROCESS,
+    });
+  }
+};
+
+export const restoreSkills = (status) => async (dispatch) => {
+  if (status === null) {
+    dispatch({
+      type:RESTORE_SKILLS_PRACTICE,
     });
   }
 };

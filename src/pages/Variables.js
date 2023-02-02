@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import Practice from "../components/modalsVariables/practice";
 import Skill from "../components/modalsVariables/skills";
 import Subject from "../components/modalsVariables/subject";
-import { getPracticesAndSubjects,deletePractice,restoreStatus200 } from "../actions/uploadPDF";
+import { getPracticesAndSubjects,deletePractice,restoreStatus200,restoreSkills } from "../actions/uploadPDF";
 import Swal from "sweetalert2";
 
 const Variables = ({
@@ -12,7 +12,7 @@ const Variables = ({
   getPracticesAndSubjects,
   deletePractice,
   deleteResult,
-  restoreStatus200
+  restoreStatus200,restoreSkills
 }) => {
   const [modalShowPractice, setModalShowPractice] = useState(false);
   const [modalShowSubject, setModalShowSubject] = useState(false);
@@ -43,10 +43,11 @@ const Variables = ({
 
     restoreStatus200(null);
 
-  }, [getPracticesAndSubjects,restoreStatus200,deleteResult]);
+  }, [getPracticesAndSubjects,restoreStatus200,deleteResult,restoreSkills]);
 
   const submitDeletePractice = (value)=> {
     deletePractice(value)
+    restoreSkills(null);
   }
 
 /* res = [
@@ -111,6 +112,7 @@ const Variables = ({
 
           <Form.Group as={Col} md="9" controlId="validationCustom02">
             <Subject
+            
               show={modalShowSubject}
               onHide={() => setModalShowSubject(false)}
             />
@@ -169,6 +171,6 @@ const mapStateToProps = (state) => ({
   deleteResult:state?.uploadDocument?.res
 });
 
-export default connect(mapStateToProps, { getPracticesAndSubjects,deletePractice,restoreStatus200})(
+export default connect(mapStateToProps, { getPracticesAndSubjects,deletePractice,restoreStatus200,restoreSkills})(
   Variables
 );

@@ -5,7 +5,6 @@ import { Button, Modal, Row, Form, Col } from "react-bootstrap";
 import {
   createPractice,
   restoreStatus200,
-  getPracticesAndSubjects,
 } from "../../actions/uploadPDF";
 import { spinnerLoading } from "../../actions/auth";
 import Swal from "sweetalert2";
@@ -15,7 +14,6 @@ const Practice = ({
   show,
   onHide,
   createPractice,
-  getPracticesAndSubjects,
   saveResult,
   spinnerLoading,
   loading,
@@ -25,7 +23,7 @@ const Practice = ({
 
   const handleClose = () => {
     onHide();
-    getPracticesAndSubjects();
+
   };
 
   const savePractice = () => {
@@ -62,7 +60,8 @@ const Practice = ({
     <>
       <Modal show={show} onHide={handleClose} size="lg">
         <Modal.Body>
-          {loading.spinnerActivated ? (
+          {
+          loading.spinnerActivated ? (
             <div className="loading-position">
               <Loading />
             </div>
@@ -82,7 +81,8 @@ const Practice = ({
                 </Form.Group>
               </Row>
             </>
-          )}
+          )
+          }
         </Modal.Body>
 
         <Modal.Footer>
@@ -105,7 +105,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  getPracticesAndSubjects,
   createPractice,
   restoreStatus200,
   spinnerLoading,
