@@ -57,7 +57,7 @@ const Skill = ({
 
   const handleClose = () => {
     onHide();
-    restoreSkills(null)
+  /* delete this code  restoreSkills(null) */
   };
 
 

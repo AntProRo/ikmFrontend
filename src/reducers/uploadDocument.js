@@ -1,6 +1,9 @@
 import {
   DOCUMENT_SUCCESS,
   DOCUMENT_FAIL,
+  IMAGE_RETURN_SUCCESS,
+  IMAGE_RETURN_FAIL,
+
   DOCUMENT_SAVE_SUCCESS,
   DOCUMENT_SAVE_FAILED,
   CANDIDATES_GET_SUCCESS,
@@ -30,6 +33,7 @@ import {
 
 const initialState = {
   /* upload file result */
+  imageFile:null,
   dataFile: null,
   /* save and get data from data base */
   processResult: null,
@@ -42,6 +46,17 @@ const initialState = {
 export default function uploadDocument(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
+    case IMAGE_RETURN_SUCCESS:
+      return {
+        ...state,
+        imageFile: payload,
+      };
+    case IMAGE_RETURN_FAIL:
+      return {
+        ...state,
+        imageFile: "Fail_Image_Document",
+      };
+
     case DOCUMENT_SUCCESS:
       return {
         ...state,
@@ -77,7 +92,8 @@ export default function uploadDocument(state = initialState, action) {
         ...state,
         processResult: null,
         skillList: [],
-
+        imageFile:null,
+        candidateList: []
         /*      data: null, */
       };
     /* RECRUITER */

@@ -11,11 +11,11 @@ import {
   RadialLinearScale,
   ArcElement,
 } from "chart.js";
-import { Bar, PolarArea } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import { useEffect, useRef, useState } from "react";
 import Loading from "../LoadingElement/Loading";
 import { spinnerLoading } from "../../actions/auth";
-import {saveDocument,restoreProcess} from "../../actions/uploadPDF";
+import { saveDocument, restoreProcess } from "../../actions/uploadPDF";
 import Swal from "sweetalert2";
 
 const ModalGraphResultSubject = ({
@@ -39,14 +39,14 @@ const ModalGraphResultSubject = ({
     RadialLinearScale,
     ArcElement
   );
-
   /* 📝 Add labels to each bar */
   const updateTemplate = useRef(null);
   /* Bar */
   const [labels, setLabels] = useState();
   const [scoreBar, setScoreBar] = useState([]);
+  const [colors, setColors] = useState(null);
   /* Circle */
-  const [scoreBarCircle, setScoreBarCircle] = useState([]);
+  const [scoreBarCircle] = useState([]);
   /* Set data for Bar graph */
   const [data, setData] = useState({
     labels: labels,
@@ -55,18 +55,6 @@ const ModalGraphResultSubject = ({
         label: "Subject Analysis",
         data: scoreBar,
         backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-    ],
-  });
-
-  /* Set data for  Circle graph */
-  const [dataCircle, setDataCircle] = useState({
-    labels: ["None"],
-    datasets: [
-      {
-        label: `Subject Coverage: 0 `,
-        data: scoreBarCircle,
-        backgroundColor: ["rgba(224, 0, 25, 0.8)"],
       },
     ],
   });
@@ -88,31 +76,36 @@ const ModalGraphResultSubject = ({
     },
   };
 
-  const optionsArea = {
-    type: "polarArea",
-    data: dataCircle,
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: "top",
-        },
-        title: {
-          display: true,
-          text: "Subject Coverage",
-        },
-      },
-    },
-  };
   /*  🔥🔥 Graph Configurations 🔥🔥*/
   useEffect(() => {
 
-    console.log(SubjectResult)
+    setColors(
+      SubjectResult?.scoreBar?.map((item, index) => {
+        let result;
+        let value = (item / 1900) * 100;
+        if (value > 100) {
+          value = 100;
+        }
 
+        if (value >= 0 && value <= 35) {
+          result = "rgb(255, 99, 71)";
+        }
+        if (value > 35 && value <= 70) {
+          result = "rgb(255, 165, 0)";
+        }
+        if (value > 70 && value <= 100) {
+          result = "rgb(60, 179, 113)";
+        }
+        return result;
+      })
+    );
 
     setScoreBar(
       SubjectResult?.scoreBar?.map((item, index) => {
-        let result = (item / 51923.5) * 100;
+        let result = (item / 1900) /* 51923.5 */ * 100;
+        if (result > 100) {
+          result = 100;
+        }
         return result;
       })
     );
@@ -125,77 +118,36 @@ const ModalGraphResultSubject = ({
 
     /* CIRCLE GRAPH */
 
-    let valuesCircle = [];
-    SubjectResult?.subjectCoverage.map((item, index) => {
-      return valuesCircle.push(item.value);
-    });
-    valuesCircle = valuesCircle.filter((item) => item !== 0);
-    setScoreBarCircle(valuesCircle);
     spinnerLoading(false);
-/* FILE SAVED SUCCESS */
-    if(saveResult === "Saved"){
+    /* FILE SAVED SUCCESS */
+    if (saveResult === "Saved") {
       Swal.fire({
         title: "Saved result!!!",
         text: ``,
         icon: "success",
         timer: "1500",
-      })
-      restoreProcess(null)
-   
+      });
+      restoreProcess(null);
     }
 
     // eslint-disable-next-line
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [SubjectResult,saveResult]);
+  }, [SubjectResult, saveResult]);
 
   useEffect(() => {
     /* Set default BarGraph */
+
     setData({
       labels,
       datasets: [
         {
           label: "Subject Analysis",
           data: scoreBar,
-          backgroundColor: "rgba(255, 99, 132, 0.5)",
+          backgroundColor: colors,
         },
       ],
     });
-
-    scoreBarCircle.length === 3
-      ? setDataCircle({
-          labels: ["Week", "Proficient", "Strong"],
-          datasets: [
-            {
-              label: `Subject Coverage, ${
-                SubjectResult?.dataMiner[7]?.subjectSubjectCoverage || 0
-              }, This area`,
-              data: scoreBarCircle,
-
-              backgroundColor: [
-                "rgba(224, 0, 25, 0.8)",
-                "rgba(253, 156, 12, 0.8)",
-                "rgba(2, 194, 68, 0.8)",
-              ],
-            },
-          ],
-        })
-      : setDataCircle({
-          labels: ["Week", "Proficient"],
-          datasets: [
-            {
-              label: `Subject Coverage: ${
-                SubjectResult?.dataMiner[7]?.subjectSubjectCoverage || 0
-              },This area`,
-              data: scoreBarCircle,
-
-              backgroundColor: [
-                "rgba(224, 0, 25, 0.8)",
-                "rgba(253, 156, 12, 0.8)",
-              ],
-            },
-          ],
-        });
-  }, [labels, scoreBar, scoreBarCircle, SubjectResult]);
+  }, [labels, scoreBar, scoreBarCircle, SubjectResult, colors]);
 
   const nameCandidateRef = useRef(null);
   const bullHornIdRef = useRef(null);
@@ -205,8 +157,6 @@ const ModalGraphResultSubject = ({
   const clientRef = useRef(null);
   const percentileRef = useRef(null);
   const subjectCoverageRef = useRef(null);
-  const workSpeedAccuracyRef = useRef(null);
-  const applicationAbilityRef = useRef(null);
 
   function convertToObj(a, b) {
     if (a.length !== b.length || a.length === 0 || b.length === 0) {
@@ -232,30 +182,13 @@ const ModalGraphResultSubject = ({
       subjectCoverageTotal: subjectCoverageRef.current.value,
       /* Second table */
       skills: convertToObj(data.labels, data.datasets[0].data),
-      /* third table */
-      workSpeedAccuracy: workSpeedAccuracyRef.current.value,
-      applicationAbility: applicationAbilityRef.current.value,
-      circleBar: {
-        weak: dataCircle?.datasets[0]?.data[0] ? dataCircle?.datasets[0]?.data[0] : 0,
-        strong: dataCircle?.datasets[0]?.data[1] ? dataCircle?.datasets[0]?.data[1] : 0,
-        proficient: dataCircle.datasets[0].data[2] ?  dataCircle.datasets[0].data[2] : 0 ,
-      },
     };
-    saveDocument(body)
-    
-   
-    
-
-    //console.log(body)
-
+    saveDocument(body);
   };
 
   const handleClose = () => {
     onHide();
   };
-
-
-
 
   return (
     <>
@@ -280,13 +213,13 @@ const ModalGraphResultSubject = ({
                   <Row className="mb-3">
                     <Form.Group as={Col} md="4" controlId="validationCustom02">
                       <Form.Label>
-                        <b>Name:</b>
+                        <b>Candidate Name:</b>
                       </Form.Label>
                       <Form.Control
                         required
                         type="text"
                         placeholder="Name"
-                        defaultValue={SubjectResult?.name}
+                        defaultValue={SubjectResult?.dataMiner[0]?.subjectName}
                         name="userName"
                         ref={nameCandidateRef}
                       />
@@ -405,36 +338,7 @@ const ModalGraphResultSubject = ({
                     </Form.Group>
                   </Row>
 
-                  <Row className="mb-3">
-                    <Form.Group as={Col} md="4" controlId="validationCustom01">
-                      <Form.Label>
-                        <b>Work Speed/Accuracy: </b>
-                      </Form.Label>
-                      <Form.Control
-                        required
-                        type="text"
-                        placeholder="Work Speed/Accuracy"
-                        defaultValue={SubjectResult?.FooterLevel[0]?.value}
-                        ref={workSpeedAccuracyRef}
-                      />
-                    </Form.Group>
-
-                    <Form.Group as={Col} md="4" controlId="validationCustom02">
-                      <Form.Label>
-                        <b>Application Ability :</b>{" "}
-                      </Form.Label>
-                      <Form.Control
-                        required
-                        type="text"
-                        placeholder="Application Ability"
-                        defaultValue={SubjectResult?.FooterLevel[1]?.value}
-                        ref={applicationAbilityRef}
-                      />
-                    </Form.Group>
-                  </Row>
                   <Bar options={optionsBar} data={data} />
-
-                  <PolarArea options={optionsArea} data={dataCircle} />
                 </Modal.Body>
               </Form>
             </>
@@ -444,12 +348,11 @@ const ModalGraphResultSubject = ({
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          {
-            SubjectResult ?   <Button variant="primary" onClick={saveData}>
-            Save this Candidate result  &#128194;
-          </Button> : null
-          }
-        
+          {SubjectResult ? (
+            <Button variant="primary" onClick={saveData}>
+              Save this Candidate result &#128194;
+            </Button>
+          ) : null}
         </Modal.Footer>
       </Modal>
     </>
@@ -458,8 +361,10 @@ const ModalGraphResultSubject = ({
 const mapStateToProps = (state) => ({
   SubjectResult: state?.uploadDocument?.dataFile || null,
   loading: state?.loadingSpinner,
-  saveResult : state?.uploadDocument?.processResult,
+  saveResult: state?.uploadDocument?.processResult,
 });
-export default connect(mapStateToProps, { saveDocument,restoreProcess,spinnerLoading })(
-  ModalGraphResultSubject
-);
+export default connect(mapStateToProps, {
+  saveDocument,
+  restoreProcess,
+  spinnerLoading,
+})(ModalGraphResultSubject);

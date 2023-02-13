@@ -23,7 +23,7 @@ body {
 }
 .upload-files-container {
 	background-color: #f7fff7;
-	width: 600px;
+	width: 800px;
 	padding: 30px 60px;
 	border-radius: 40px;
 	display: flex;
@@ -37,7 +37,7 @@ body {
 	border-radius: 40px;
 	margin: 10px 0 15px;
 	padding: 30px 50px;
-	width: 500px;
+	width: 700px;
 	text-align: center;
 }
 .drag-file-area .upload-icon {
@@ -233,75 +233,6 @@ body {
   border-top: 5px solid var(--Cyan);
 }
 
-/* .feature-two {
-  border-top: 5px solid var(--Red);
-}
-
-.feature-three {
-  border-top: 5px solid var(--Orange);
-}
-
-.feature-four {
-  border-top: 5px solid var(--Blue);
-}
- */
-/* attribution styling */
-
-/* footer {
-  position: absolute;
-  top: 0;
-}
-
-.attribution {
-  color: var(--Very-Dark-Blue);
-  opacity: 0.7;
-}
-
-.attribution a {
-  color: var(--Blue);
-  text-decoration: underline;
-}
-
-.attribution a:hover {
-  color: var(--Cyan);
-} */
-
-/* media queries */
-
-/* @media (min-width: 1000px) {
-  body {
-    align-items: center;
-    min-height: 100vh;
-  }
-
-  section {
-    max-width: 200rem;
-  }
-
-  .section__title {
-    margin: 0 auto;
-    max-width: 40%;
-    font-size: 2rem;
-  }
-
-  .section__desc {
-    max-width: 55ch;
-    margin: 1rem auto 1rem;
-  }
-
-  .features {
-    display: flex;
-    gap: 2rem;
-  }
-
-  .feature-one {
-    margin: auto 0;
-  }
-
-  .feature-four {
-    margin: auto 0;
-  }
-} */
 
 /* grid candidates */
 .gridCandidates {
@@ -324,4 +255,18 @@ body {
 }
 
 /* CARD */
+
+
+/* CROP IMAGES */
+
+.gridCrop {
+ display: grid;
+ grid-template-columns: 50% 50%;
+}
+.my-modal {
+    width: 90vw ;   /* Occupy the 90% of the screen width */
+    max-width: 90vw;
+} 
+
+/* BORDER CROPPER IMAGES */
 

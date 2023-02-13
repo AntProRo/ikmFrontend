@@ -8,10 +8,15 @@ export const adminService = () => {
     const url = `/api/updateAccount/${id}`;
     return put(url, body, "updateAccount", {});
   }; */
-
   const ApiUploadDocument = (body) => {
     const url = `${process.env.REACT_APP_API_URL}/document/upload/`;
     return post(url, body, "uploadDocument", {});
+  };
+
+
+  const ApiAnalysisDocument = (body) => {
+    const url = `${process.env.REACT_APP_API_URL}/document/getAnalysis/`;
+    return post(url, body, "getDocument", {});
   };
 
   const ApiSaveDocument = (body) => {
@@ -55,9 +60,20 @@ export const adminService = () => {
     return deleteFn(url,"delete Practice",{})
   }
 
+  const ApiDeleteCandidate =(id) =>{
+    const url = `${process.env.REACT_APP_API_URL}/recruiter/deleteCandidate/${id}/`;
+    return deleteFn(url,"delete candidate",{})
+  }
+
+  const ApiDeleteSkill =(id) =>{
+    const url = `${process.env.REACT_APP_API_URL}/recruiter/deleteSkill/${id}/`;
+    return deleteFn(url,"delete Skill",{})
+  }
+
   /* RECRUITER OPTIONS */
 
   return {
+    ApiAnalysisDocument,
     ApiUploadDocument,
     ApiSaveDocument,
     ApiGetCandidates,
@@ -66,7 +82,9 @@ export const adminService = () => {
     ApiCreatePractice,
     ApiCreateSubject,
     ApiCreateSkill,
-    ApiDeletePractice
+    ApiDeletePractice,
+    ApiDeleteCandidate,
+    ApiDeleteSkill
 
   };
 };

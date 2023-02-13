@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getCandidates } from "../actions/uploadPDF";
+import { deleteCandidate, getCandidates,restoreProcess,restoreStatus200 } from "../actions/uploadPDF";
 import { connect } from "react-redux";
 import {
   Button,
@@ -11,8 +11,8 @@ import {
   Dropdown,
   InputGroup,
 } from "react-bootstrap";
-
-function Candidates({ getCandidates, candidateList }) {
+import Swal from "sweetalert2";
+function Candidates({ getCandidates, candidateList,deleteCandidate,restoreProcess,restoreStatus200,deleteResult}) {
   const [showMore, setShowMore] = useState(false);
   const [list2, setList2] = useState([]);
 
@@ -27,11 +27,34 @@ function Candidates({ getCandidates, candidateList }) {
   function handleChange() {
     setFindItem(valueSearch.current.value);
   }
+
+  const submitDeleteCandidate =(value)=>{
+    deleteCandidate(value)
+
+  }
   useEffect(() => {
     getCandidates();
+    if (deleteResult === "deleted") {
+      getCandidates();
+      Swal.fire({
+        title: "Practice deleted!!!",
+        text: ``,
+        icon: "success",
+        timer: "1500",
+      });
+    }
+    if (deleteResult === "fail_delete_practice") {
+      
+      Swal.fire({
+        title: "Something was wrong!!!",
+        text: ``,
+        icon: "error",
+      });
+    }
+    restoreStatus200(null)
     // eslint-disable-next-line import/no-extraneous-dependencies
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showMore, list2]);
+  }, [showMore, list2,getCandidates,restoreStatus200,deleteResult]);
 
   const handleClose = () => {
     setShowMore(false);
@@ -69,7 +92,7 @@ function Candidates({ getCandidates, candidateList }) {
     return obj;
   });
 
-  useEffect(() => {}, [mainSearch,moreInfo]);
+  useEffect(() => {}, [mainSearch,moreInfo,restoreProcess]);
 
   return (
     <>
@@ -133,6 +156,10 @@ function Candidates({ getCandidates, candidateList }) {
                       >
                         see more{" "}
                       </Button>
+                      &nbsp;
+                      <Button className="danger" onClick={()=> {submitDeleteCandidate(item?.userData?.id)}}>
+                        Delete Candidate
+                      </Button>
                     </Modal.Footer>
                   </Row>
                 </Modal.Body>
@@ -146,10 +173,7 @@ function Candidates({ getCandidates, candidateList }) {
         <Modal.Header>
         Name: {moreInfo?.userData?.nameCandidate} <br/>
         Bull horn id: {moreInfo?.userData?.bullHornId}<br/>
-        Subject coverage: {moreInfo?.userData?.subjectCoverageTotal}<br/>
-         Coverage proficient: {moreInfo?.userCoverage?.proficient}<br/> 
-         Coverage strong: {moreInfo?.userCoverage?.strong }<br/>
-        Coverage weak:{moreInfo?.userCoverage?.weak}<br/> 
+        Subject coverage: {moreInfo?.userData?.subjectCoverageTotal}<br/> 
         </Modal.Header>
         <ModalBody>
 
@@ -175,6 +199,7 @@ function Candidates({ getCandidates, candidateList }) {
 
 const mapStateToProps = (state) => ({
   candidateList: state?.uploadDocument?.candidateList,
+  deleteResult:state?.uploadDocument?.res
 });
 
-export default connect(mapStateToProps, { getCandidates })(Candidates);
+export default connect(mapStateToProps, { getCandidates,deleteCandidate,restoreProcess,restoreStatus200 })(Candidates);

@@ -1,6 +1,10 @@
 import {
+  IMAGE_RETURN_SUCCESS,
+  IMAGE_RETURN_FAIL,
   DOCUMENT_SUCCESS,
   DOCUMENT_FAIL,
+
+
   DOCUMENT_SAVE_SUCCESS,
   DOCUMENT_SAVE_FAILED,
   CANDIDATES_GET_SUCCESS,
@@ -29,6 +33,7 @@ import {
 } from "./types";
 import { adminService } from "../httpServices/authService";
 const {
+  ApiAnalysisDocument,
   ApiUploadDocument,
   ApiSaveDocument,
   ApiGetCandidates,
@@ -40,6 +45,8 @@ const {
   ApiCreateSkill,
   /* DELETE  */
   ApiDeletePractice,
+  ApiDeleteCandidate,
+  ApiDeleteSkill
 
 } = adminService();
 
@@ -67,9 +74,9 @@ export const restoreStatus200 = (status)=> async(dispatch) => {
   } 
 }
 
-export const postDocument = (formData) => async (dispatch) => {
+export const  postAnalysisDocument = (formData)=> async(dispatch) =>{
   try {
-    const res = await ApiUploadDocument(formData);
+    const res = await ApiAnalysisDocument(formData);
     if (res.status !== 200) {
       dispatch({
         type: DOCUMENT_FAIL,
@@ -83,6 +90,26 @@ export const postDocument = (formData) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: DOCUMENT_FAIL,
+    });
+  }
+}
+
+export const postDocument = (formData) => async (dispatch) => {
+  try {
+    const res = await ApiUploadDocument(formData);
+    if (res.status !== 200) {
+      dispatch({
+        type: IMAGE_RETURN_FAIL,
+      });
+    } else {
+      dispatch({
+        type: IMAGE_RETURN_SUCCESS,
+        payload: res.data,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: IMAGE_RETURN_FAIL,
     });
   }
 };
@@ -168,6 +195,51 @@ export const createPractice = (formData) => async (dispatch) => {
     });
   }
 };
+
+
+
+export const deleteCandidate = (id) => async (dispatch) => {
+  try {
+    const res = await ApiDeleteCandidate(id);
+    if (res.status !== 200) {
+      dispatch({
+        type: PRACTICE_DELETE_FAIL,
+      });
+    } else {
+      dispatch({
+        type: PRACTICE_DELETE_SUCCESS,
+        payload: res.data,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: PRACTICE_DELETE_FAIL,
+    });
+  }
+};
+
+
+
+export const deleteSkill = (id) => async (dispatch) => {
+  try {
+    const res = await ApiDeleteSkill(id);
+    if (res.status !== 200) {
+      dispatch({
+        type: PRACTICE_DELETE_FAIL,
+      });
+    } else {
+      dispatch({
+        type: PRACTICE_DELETE_SUCCESS,
+        payload: res.data,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: PRACTICE_DELETE_FAIL,
+    });
+  }
+};
+
 
 
 export const deletePractice = (id) => async (dispatch) => {

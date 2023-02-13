@@ -1,27 +1,27 @@
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import { connect } from "react-redux";
-import { spinnerLoading,actionSuccessAlert } from "../actions/auth";
+import { spinnerLoading, actionSuccessAlert } from "../actions/auth";
 import { postDocument } from "../actions/uploadPDF";
 import ModalGraphResultSubject from "../components/modalGraph/ModalGraphResultSubject";
-
-
-
+import CropperImage from "../components/Cropper";
+import Loading from "../components/LoadingElement/Loading";
 
 const Dashboard = ({
   SubjectResult,
+  SubjectResultImage,
   postDocument,
   spinnerLoading,
   loading,
   actionSuccessAlert,
-  alertSuccess
+  alertSuccess,
 }) => {
   const inputFile = useRef(null);
   /* Modal */
   const [modalShowResult, setModalShowResult] = useState(false);
+  const [modalCropperEditor, setModalCropperEditor] = useState(false);
   const [name, setName] = useState(null);
   const [uploadFile, setUploadFile] = useState(null);
-
 
   const onButtonClick = (e) => {
     e.preventDefault();
@@ -35,8 +35,12 @@ const Dashboard = ({
       let formData = new FormData();
       formData.append("upload", uploadFile);
       postDocument(formData);
+      setUploadFile(null);
+      setModalCropperEditor(true);
       spinnerLoading(true);
-      setModalShowResult(true);
+
+      /* spinnerLoading(true); */
+      /* setModalShowResult(true); */
     } catch (err) {
       console.log(err);
     }
@@ -46,8 +50,7 @@ const Dashboard = ({
     () => {
       /* ERROR DOCUMENT VALIDATION */
       setName(SubjectResult?.name || null);
-     
-      
+
       if (SubjectResult === "Fail_Upload_Document") {
         Swal.fire({
           title: "Something was wrong with this document!",
@@ -64,20 +67,30 @@ const Dashboard = ({
       }
       /* LOGIN STARTED */
       if (alertSuccess) {
-        actionSuccessAlert(false)
+        actionSuccessAlert(false);
         Swal.fire({
           title: "Welcome to dashboard page!!!",
           text: ``,
           icon: "success",
           timer: "1500",
-        })
+        });
       }
 
+      if (uploadFile !== null) {
+        submit();
+      }
+      /*    if (SubjectResultImage !== null) {
+        setModalCropperEditor(true);
+      } */
     },
     // eslint-disable-next-line import/no-extraneous-dependencies
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [SubjectResult, name,alertSuccess],
+    [SubjectResult, name, alertSuccess, uploadFile, SubjectResultImage]
   );
+
+  const reStoreInput = ()=> {
+    
+  }
 
   return (
     <>
@@ -85,57 +98,62 @@ const Dashboard = ({
         <div className="upload-files-container">
           <div className="drag-file-area">
             <span className="material-icons-outlined upload-icon" type="submit">
-              {" "}
-              {uploadFile ? <>Ready</> : <>Choose a file</>}{" "}
+              Choose a file
             </span>
+
             <input
               type="file"
               id="file"
               name="file"
-              ref={inputFile}
+             
               onChange={onButtonClick}
             />
           </div>
           <span className="cannot-upload-message">
-            {" "}
             <span className="material-icons-outlined">error</span> Please select
-            a file first{" "}
+            a file first
             <span className="material-icons-outlined cancel-alert-button">
               Cancel
-            </span>{" "}
+            </span>
           </span>
 
-          {uploadFile ? (
+          {SubjectResultImage !== null || name? (
             <>
               <button
                 type="button"
                 onClick={() => {
-                  submit();
-                  
+                  setModalCropperEditor(true);
                 }}
                 className="upload-button"
               >
-                {" "}
-                Run{" "}
+                open editor
               </button>
             </>
+          ) : loading.spinnerActivated ? (
+            <Loading />
           ) : null}
 
           {name ? (
             <>
               <button
                 type="button"
-                onClick={() => setModalShowResult(true)}
+                onClick={() => {setModalShowResult(true);}}
                 className="upload-button"
               >
                 See graph of {name}
               </button>
+  
             </>
           ) : null}
         </div>
       </form>
+
+      <CropperImage
+        show={modalCropperEditor}
+        onHide={() => setModalCropperEditor(false)}
+      />
+
       <ModalGraphResultSubject
- 
         show={modalShowResult}
         onHide={() => setModalShowResult(false)}
       />
@@ -147,11 +165,14 @@ const mapStateToProps = (state) => ({
   //is authenticated
   token: state.auth.access,
   loading: state?.loadingSpinner,
-  SubjectResult: state?.uploadDocument?.data,
+  SubjectResult: state?.uploadDocument?.dataFile,
+  SubjectResultImage: state?.uploadDocument?.imageFile,
   // login is authenticated
-  alertSuccess:state?.auth?.successAlert,
+  alertSuccess: state?.auth?.successAlert,
 });
 
-export default connect(mapStateToProps, { postDocument, spinnerLoading,actionSuccessAlert})(
-  Dashboard
-);
+export default connect(mapStateToProps, {
+  postDocument,
+  spinnerLoading,
+  actionSuccessAlert,
+})(Dashboard);
