@@ -29,7 +29,13 @@ import {
   PRACTICE_DELETE_FAIL,
 
   RESTORE_STATUS_200,
-  RESTORE_SKILLS_PRACTICE
+  RESTORE_SKILLS_PRACTICE,
+
+  /* CROP OPTIONS */
+  CROP_SAVE_SUCCESS,
+  CROP_GET_SUCCESS,
+  CROP_SAVE_FAIL,
+  CROP_GET_FAIL,
 } from "./types";
 import { adminService } from "../httpServices/authService";
 const {
@@ -46,7 +52,10 @@ const {
   /* DELETE  */
   ApiDeletePractice,
   ApiDeleteCandidate,
-  ApiDeleteSkill
+  ApiDeleteSkill,
+  /* CROP */
+  ApiSaveCropDefault,
+  ApiGetCropDefault,
 
 } = adminService();
 
@@ -320,6 +329,49 @@ export const getSkills = (id) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: SKILLS_GET_FAIL,
+    });
+  }
+};
+
+/* CROP */
+
+export const getCropDefault = () => async (dispatch) => {
+  try {
+    const res = await ApiGetCropDefault();
+    if (res.status !== 200) {
+      dispatch({
+        type:  CROP_GET_FAIL,
+      });
+    } else {
+      dispatch({
+        type: CROP_GET_SUCCESS,
+        payload: res.data,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type:  CROP_GET_FAIL,
+    });
+  }
+};
+
+
+export const updateCropDefault = (formData) => async (dispatch) => {
+  try {
+    const res = await ApiSaveCropDefault(formData);
+    if (res.status !== 200) {
+      dispatch({
+        type: CROP_SAVE_FAIL,
+      });
+    } else {
+      dispatch({
+        type: CROP_SAVE_SUCCESS,
+        payload: res.data,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: CROP_SAVE_FAIL,
     });
   }
 };

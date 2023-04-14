@@ -3,7 +3,6 @@ import {
   DOCUMENT_FAIL,
   IMAGE_RETURN_SUCCESS,
   IMAGE_RETURN_FAIL,
-
   DOCUMENT_SAVE_SUCCESS,
   DOCUMENT_SAVE_FAILED,
   CANDIDATES_GET_SUCCESS,
@@ -26,14 +25,19 @@ import {
   PRACTICE_POST_FAIL,
   PRACTICE_DELETE_SUCCESS,
   PRACTICE_DELETE_FAIL,
-  /* RESTORE STATUS 200 */
+  /* RESTORE STATUS OR SKILLS */
   RESTORE_STATUS_200,
-  RESTORE_SKILLS_PRACTICE
+  RESTORE_SKILLS_PRACTICE,
+  /* CROP OPTIONS */
+  CROP_SAVE_SUCCESS,
+  CROP_GET_SUCCESS,
+  CROP_SAVE_FAIL,
+  CROP_GET_FAIL,
 } from "../actions/types";
 
 const initialState = {
   /* upload file result */
-  imageFile:null,
+  imageFile: null,
   dataFile: null,
   /* save and get data from data base */
   processResult: null,
@@ -41,6 +45,14 @@ const initialState = {
   skillList: [],
   /* POST */
   res: null,
+  /* POST CROP */
+  resCrop: {
+    height: null,
+    unit: null,
+    width: null,
+    x:null,
+    y: null
+  },
 };
 
 export default function uploadDocument(state = initialState, action) {
@@ -92,9 +104,9 @@ export default function uploadDocument(state = initialState, action) {
         ...state,
         processResult: null,
         skillList: [],
-        imageFile:null,
-        candidateList: []
-        /*      data: null, */
+        imageFile: null,
+        candidateList: [],
+        /* data: null, */
       };
     /* RECRUITER */
     case SKILLS_GET_SUCCESS:
@@ -137,7 +149,7 @@ export default function uploadDocument(state = initialState, action) {
     case SUBJECT_POST_FAIL:
       return {
         ...state,
-      res: "fail_post_subject",
+        res: "fail_post_subject",
       };
 
     case PRACTICE_DELETE_SUCCESS:
@@ -164,14 +176,33 @@ export default function uploadDocument(state = initialState, action) {
       return {
         ...state,
         res: null,
-       
       };
-      case RESTORE_SKILLS_PRACTICE:
-        return {
-          ...state,
-          skillList: [],
-        }
-
+    case RESTORE_SKILLS_PRACTICE:
+      return {
+        ...state,
+        skillList: [],
+      };
+    /* CROP OPTIONS */
+    case CROP_SAVE_SUCCESS:
+      return {
+        ...state,
+        res: "Crop Saved as default",
+      };
+    case CROP_GET_SUCCESS:
+      return {
+        ...state,
+        resCrop: payload,
+      };
+    case CROP_SAVE_FAIL:
+      return {
+        ...state,
+        res: "fail",
+      };
+    case CROP_GET_FAIL:
+      return {
+        ...state,
+        resCrop: null,
+      };
     default:
       return state;
   }

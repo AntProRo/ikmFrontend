@@ -1,7 +1,7 @@
 import {HttpService}  from "./httpService";
 
 export const adminService = () => {
- const { post, get,  deleteFn,/* put */ } = HttpService(); 
+ const { post, get,  deleteFn, put  } = HttpService(); 
 
 
 /*   const updateUser = (id, body) => {
@@ -70,6 +70,16 @@ export const adminService = () => {
     return deleteFn(url,"delete Skill",{})
   }
 
+  const ApiSaveCropDefault = (body) => {
+    const url =  `${process.env.REACT_APP_API_URL}/recruiter/saveCrop/`;
+    return put(url,body,"Cropped updated",{})
+  }
+
+  const ApiGetCropDefault = () => {
+    const url =  `${process.env.REACT_APP_API_URL}/recruiter/saveCrop/`;
+    return get(url,"Get default crop")
+  }
+
   /* RECRUITER OPTIONS */
 
   return {
@@ -84,7 +94,9 @@ export const adminService = () => {
     ApiCreateSkill,
     ApiDeletePractice,
     ApiDeleteCandidate,
-    ApiDeleteSkill
+    ApiDeleteSkill,
+    ApiSaveCropDefault,
+    ApiGetCropDefault
 
   };
 };
