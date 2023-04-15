@@ -1,6 +1,6 @@
 FROM node:16-alpine
-WORKDIR /client
-ENV PATH /client/node_modules/.bin:$PATH
+WORKDIR /ikmfront
+ENV PATH /ikmfront/node_modules/.bin:$PATH
 COPY package.json ./
 COPY ./src ./src
 COPY ./public ./public
