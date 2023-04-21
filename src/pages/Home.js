@@ -5,20 +5,19 @@ import { connect } from "react-redux";
 const Home = ({isAuthenticated }) => (
   <div className="container">
     <div className="jumbotron mt-5">
-      <h1 className="display-4">Wel come to IKM WEB</h1>
+      <h1 className="display-4">Welcome to IKM WEB</h1>
       <p className="lead">
-      System to obtain results of your candidates directly from a pdf
+        System to obtain results of your candidates directly from a pdf
       </p>
       <hr className="my-4" />
-      <p>
-      Click the Log In Button
-      </p>
+      
       {
         !isAuthenticated && <p className="lead">
+        <span>Click the Log In Button</span><br />
         <Link className="btn btn-primary btn-lg" to="/login" role="button">
           Login
         </Link>
-      </p>
+        </p>
       }
       
     </div>

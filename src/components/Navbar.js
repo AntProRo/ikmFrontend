@@ -72,11 +72,6 @@ const Navbar = ({ logout, isAuthenticated }) => {
 
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav mr-auto">
-          <li className="nav-item active">
-            <Link className="nav-link" to="/">
-             <b> Home </b> <span className="sr-only">(current)</span>
-            </Link>
-          </li>
           {isAuthenticated ? authLinks() : guestLinks()}
         </ul>
       </div>
