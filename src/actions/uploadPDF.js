@@ -4,33 +4,40 @@ import {
   DOCUMENT_SUCCESS,
   DOCUMENT_FAIL,
 
-
   DOCUMENT_SAVE_SUCCESS,
   DOCUMENT_SAVE_FAILED,
   CANDIDATES_GET_SUCCESS,
   CANDIDATES_GET_FAILED,
   RESTORE_PROCESS,
-
   /* RECRUITER */
   /* SKIllS */
   SKILLS_GET_SUCCESS,
   SKILLS_GET_FAIL,
   SKILLS_POST_SUCCESS,
   SKILLS_POST_FAIL,
+  SKILLS_DELETE_FAIL,
+  SKILLS_DELETE_SUCCESS,
+  SKILLS_UPDATE_SUCCESS,
+  SKILLS_UPDATE_FAIL,
   /* SUBJECT */
   PRACTICES_SUBJECTS_GET_SUCCESS,
   PRACTICES_SUBJECTS_GET_FAIL,
   SUBJECT_POST_SUCCESS,
   SUBJECT_POST_FAIL,
+  SUBJECT_DELETE_SUCCESS,
+  SUBJECT_DELETE_FAIL,
+  SUBJECT_UPDATE_SUCCESS,
+  SUBJECT_UPDATE_FAIL,
   /* PRACTICE */
   PRACTICE_POST_SUCCESS,
   PRACTICE_POST_FAIL,
   PRACTICE_DELETE_SUCCESS,
   PRACTICE_DELETE_FAIL,
-
+  PRACTICE_UPDATE_SUCCESS,
+  PRACTICE_UPDATE_FAIL,
+/* RESTORES STORAGE */
   RESTORE_STATUS_200,
   RESTORE_SKILLS_PRACTICE,
-
   /* CROP OPTIONS */
   CROP_SAVE_SUCCESS,
   CROP_GET_SUCCESS,
@@ -53,6 +60,11 @@ const {
   ApiDeletePractice,
   ApiDeleteCandidate,
   ApiDeleteSkill,
+  ApiDeleteSubject,
+  /* UPDATE */
+  ApiUpdatePractice,
+  ApiUpdateSubject,
+  ApiUpdateSkill,
   /* CROP */
   ApiSaveCropDefault,
   ApiGetCropDefault,
@@ -123,6 +135,7 @@ export const postDocument = (formData) => async (dispatch) => {
   }
 };
 
+/* SAVE RESULT */
 export const saveDocument = (formData) => async (dispatch) => {
   try {
     const res = await ApiSaveDocument(formData);
@@ -142,6 +155,7 @@ export const saveDocument = (formData) => async (dispatch) => {
   }
 };
 
+/* SUBJECT ANALYSIS SETTINGS */
 export const getCandidates = () => async (dispatch) => {
   try {
     const res = await ApiGetCandidates();
@@ -161,50 +175,6 @@ export const getCandidates = () => async (dispatch) => {
     });
   }
 };
-
-/* RECRUITER */
-
-export const getPracticesAndSubjects = () => async (dispatch) => {
-  try {
-    const res = await ApiGetPracticesAndSubjects();
-    if (res.status !== 200) {
-      dispatch({
-        type: PRACTICES_SUBJECTS_GET_FAIL,
-      });
-    } else {
-      dispatch({
-        type: PRACTICES_SUBJECTS_GET_SUCCESS,
-        payload: res.data,
-      });
-    }
-  } catch (err) {
-    dispatch({
-      type: PRACTICES_SUBJECTS_GET_FAIL,
-    });
-  }
-};
-
-/* PRACTICE */
-export const createPractice = (formData) => async (dispatch) => {
-  try {
-    const res = await ApiCreatePractice(formData);
-    if (res.status !== 200) {
-      dispatch({
-        type: PRACTICE_POST_FAIL,
-      });
-    } else {
-      dispatch({
-        type: PRACTICE_POST_SUCCESS,
-        payload: res.data,
-      });
-    }
-  } catch (err) {
-    dispatch({
-      type: PRACTICE_POST_FAIL,
-    });
-  }
-};
-
 
 
 export const deleteCandidate = (id) => async (dispatch) => {
@@ -227,28 +197,47 @@ export const deleteCandidate = (id) => async (dispatch) => {
   }
 };
 
-
-
-export const deleteSkill = (id) => async (dispatch) => {
+/* PRACTICE */
+export const getPracticesAndSubjects = () => async (dispatch) => {
   try {
-    const res = await ApiDeleteSkill(id);
+    const res = await ApiGetPracticesAndSubjects();
     if (res.status !== 200) {
       dispatch({
-        type: PRACTICE_DELETE_FAIL,
+        type: PRACTICES_SUBJECTS_GET_FAIL,
       });
     } else {
       dispatch({
-        type: PRACTICE_DELETE_SUCCESS,
+        type: PRACTICES_SUBJECTS_GET_SUCCESS,
         payload: res.data,
       });
     }
   } catch (err) {
     dispatch({
-      type: PRACTICE_DELETE_FAIL,
+      type: PRACTICES_SUBJECTS_GET_FAIL,
     });
   }
 };
 
+
+export const createPractice = (formData) => async (dispatch) => {
+  try {
+    const res = await ApiCreatePractice(formData);
+    if (res.status !== 200) {
+      dispatch({
+        type: PRACTICE_POST_FAIL,
+      });
+    } else {
+      dispatch({
+        type: PRACTICE_POST_SUCCESS,
+        payload: res.data,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: PRACTICE_POST_FAIL,
+    });
+  }
+};
 
 
 export const deletePractice = (id) => async (dispatch) => {
@@ -271,7 +260,28 @@ export const deletePractice = (id) => async (dispatch) => {
   }
 };
 
-/* PRACTICE */
+
+export const updatePractice =(formData,id) => async(dispatch)=> {
+  try {
+    const res = await ApiUpdatePractice(formData,id);
+    if (res.status !== 200) {
+      dispatch({
+        type: PRACTICE_UPDATE_FAIL,
+      });
+    } else {
+      dispatch({
+        type: PRACTICE_UPDATE_SUCCESS,
+        payload: res.data,
+      });
+    }
+  } catch(err) {
+    dispatch({
+      type: PRACTICE_UPDATE_FAIL,
+    });
+  }
+};
+
+/* SUBJECTS */
 
 export const createSubject = (formData, id) => async (dispatch) => {
   try {
@@ -289,6 +299,66 @@ export const createSubject = (formData, id) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: SUBJECT_POST_FAIL,
+    });
+  }
+};
+
+export const deleteSubject = (id) => async (dispatch) => {
+  try {
+    const res = await ApiDeleteSubject(id);
+    if (res.status !== 200) {
+      dispatch({
+        type: SUBJECT_DELETE_FAIL,
+      });
+    } else {
+      dispatch({
+        type: SUBJECT_DELETE_SUCCESS,
+        payload: res.data,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: SUBJECT_DELETE_FAIL,
+    });
+  }
+};
+
+export const updateSubject =(formData,id) => async(dispatch)=> {
+  try {
+    const res = await ApiUpdateSubject(formData,id);
+    if (res.status !== 200) {
+      dispatch({
+        type: SUBJECT_UPDATE_FAIL,
+      });
+    } else {
+      dispatch({
+        type: SUBJECT_UPDATE_SUCCESS,
+        payload: res.data,
+      });
+    }
+  } catch(err) {
+    dispatch({
+      type: SUBJECT_UPDATE_FAIL,
+    });
+  }
+};
+/* SKILLS */
+export const getSkills = (id) => async (dispatch) => {
+  try {
+    const res = await ApiGetSkills(id);
+    if (res.status !== 200) {
+      dispatch({
+        type: SKILLS_GET_FAIL,
+      });
+    } else {
+      dispatch({
+        type: SKILLS_GET_SUCCESS,
+        payload: res.data,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: SKILLS_GET_FAIL,
     });
   }
 };
@@ -313,22 +383,42 @@ export const createSkill = (formData, id) => async (dispatch) => {
   }
 };
 
-export const getSkills = (id) => async (dispatch) => {
+export const updateSkill =(formData,id) => async(dispatch)=> {
   try {
-    const res = await ApiGetSkills(id);
+    const res = await ApiUpdateSkill(formData,id);
     if (res.status !== 200) {
       dispatch({
-        type: SKILLS_GET_FAIL,
+        type: SKILLS_UPDATE_FAIL,
       });
     } else {
       dispatch({
-        type: SKILLS_GET_SUCCESS,
+        type: SKILLS_UPDATE_SUCCESS,
+        payload: res.data,
+      });
+    }
+  } catch(err) {
+    dispatch({
+      type: SKILLS_UPDATE_FAIL,
+    });
+  }
+};
+
+export const deleteSkill = (id) => async (dispatch) => {
+  try {
+    const res = await ApiDeleteSkill(id);
+    if (res.status !== 200) {
+      dispatch({
+        type: SKILLS_DELETE_FAIL,
+      });
+    } else {
+      dispatch({
+        type: SKILLS_DELETE_SUCCESS,
         payload: res.data,
       });
     }
   } catch (err) {
     dispatch({
-      type: SKILLS_GET_FAIL,
+      type: SKILLS_DELETE_FAIL,
     });
   }
 };

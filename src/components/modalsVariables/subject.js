@@ -29,10 +29,10 @@ const Subject = ({
   };
 
   useEffect(() => {
-    if (saveResult === "Saved") {
+    if (saveResult === "Saved_subject") {
       spinnerLoading(false);
       Swal.fire({
-        title: "Practice saved!!!",
+        title: "Subject saved!!!",
         text: ``,
         icon: "success",
         timer: "1500",

@@ -7,8 +7,8 @@ import {
   restoreStatus200,
 } from "../../actions/uploadPDF";
 import { spinnerLoading } from "../../actions/auth";
-import Swal from "sweetalert2";
 import Loading from "../LoadingElement/Loading";
+import {GlobalSweetAlert} from "../Alert/SweetAlert";
 
 const Practice = ({
   show,
@@ -20,10 +20,8 @@ const Practice = ({
   restoreStatus200,
 }) => {
   const namePractice = useRef(null);
-
   const handleClose = () => {
     onHide();
-
   };
 
   const savePractice = () => {
@@ -31,29 +29,32 @@ const Practice = ({
       namePractice: namePractice.current.value,
     };
     createPractice(body);
-
     spinnerLoading(true);
   };
 
   useEffect(() => {
-    if (saveResult === "Saved") {
+    if (saveResult === "Saved_practice") {
       spinnerLoading(false);
-      Swal.fire({
-        title: "Practice saved!!!",
-        text: ``,
-        icon: "success",
-        timer: "1500",
-      });
+      const alertActive = {
+      title:"Practice saved!!!",
+      message:"",
+      typeIcon:"success",
+      timerToFinish:1500,
+      
+      } 
+      GlobalSweetAlert(alertActive)
+    
     }
     if (saveResult === "fail_post_practice") {
       spinnerLoading(false);
-      Swal.fire({
-        title: "Something was wrong!!!",
-        text: `try with another name`,
-        icon: "error",
-      });
+      const alertActive = {
+        title:"Something was wrong!!!",
+        message:"try with another name",
+        typeIcon:"error",
+        timerToFinish:1500
+        } 
+        GlobalSweetAlert(alertActive)
     }
-
     restoreStatus200(null);
   }, [saveResult, spinnerLoading, restoreStatus200]);
   return (

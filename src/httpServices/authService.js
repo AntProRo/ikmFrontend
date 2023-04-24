@@ -60,6 +60,11 @@ export const adminService = () => {
     return deleteFn(url,"delete Practice",{})
   }
 
+  const ApiDeleteSubject =(id) =>{
+    const url = `${process.env.REACT_APP_API_URL}/recruiter/deleteSubject/${id}/`;
+    return deleteFn(url,"delete Subject",{})
+  }
+
   const ApiDeleteCandidate =(id) =>{
     const url = `${process.env.REACT_APP_API_URL}/recruiter/deleteCandidate/${id}/`;
     return deleteFn(url,"delete candidate",{})
@@ -68,6 +73,21 @@ export const adminService = () => {
   const ApiDeleteSkill =(id) =>{
     const url = `${process.env.REACT_APP_API_URL}/recruiter/deleteSkill/${id}/`;
     return deleteFn(url,"delete Skill",{})
+  }
+
+  const ApiUpdatePractice = (body,id) => {
+    const url = `${process.env.REACT_APP_API_URL}/recruiter/updatePractice/${id}/`;
+    return put(url,body,"update practice",{})
+  }
+
+  const ApiUpdateSubject = (body,id) => {
+    const url = `${process.env.REACT_APP_API_URL}/recruiter/updateSubject/${id}/`;
+    return put(url,body,"update subject",{})
+  }
+
+  const ApiUpdateSkill = (body,id) => {
+    const url = `${process.env.REACT_APP_API_URL}/recruiter/updateSkill/${id}/`;
+    return put(url,body,"update skill",{})
   }
 
   const ApiSaveCropDefault = (body) => {
@@ -79,6 +99,8 @@ export const adminService = () => {
     const url =  `${process.env.REACT_APP_API_URL}/recruiter/saveCrop/`;
     return get(url,"Get default crop")
   }
+
+  
 
   /* RECRUITER OPTIONS */
 
@@ -93,10 +115,13 @@ export const adminService = () => {
     ApiCreateSubject,
     ApiCreateSkill,
     ApiDeletePractice,
+    ApiDeleteSubject,
     ApiDeleteCandidate,
     ApiDeleteSkill,
     ApiSaveCropDefault,
-    ApiGetCropDefault
-
+    ApiGetCropDefault,
+    ApiUpdatePractice, 
+    ApiUpdateSubject,
+    ApiUpdateSkill
   };
 };

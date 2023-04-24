@@ -244,8 +244,8 @@ const CropperImage = ({
                     style={{
                       border: "1.0px dashed #000",
                       objectFit: "cover",
-                      height: "25rem",
-                      width: "25rem",
+                      height: "15rem",
+                      width: "15rem",
                     }}
                   />
                 </div>
@@ -256,8 +256,8 @@ const CropperImage = ({
                     style={{
                       border: "1.0px dashed #000",
                       objectFit: "cover",
-                      height: "25rem",
-                      width: "25rem",
+                      height: "15rem",
+                      width: "15rem",
                     }}
                   />
                 </div>
