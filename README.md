@@ -1,36 +1,63 @@
-# Getting Started with Create React App
+# It is very important to have docker-desktop installed preferably on Windows
+The Zscaler can restrict the installation of docker-desktop,
+talk to Javi or enrique to have permission to installation.
 
-## ikmFrontend
+# Ikm backend repository, Windows installation 🙌 
+Install python and pip > 3.5 in windows, pip is included with the installation of python
+https://www.python.org/downloads/ 
 
-## To run this program
-create a folder named IKMWEB
+## 1. Clone the backend repository 
+Create a folder with the name IKMWEB and inside of the folder,
+clone the repository https://github.com/AntProRo/ikmback.git
 
-## clone this repository inside of your folder
-https://github.com/AntProRo/ikmFrontend.git
+## 2. Install dependencies
+Open the terminal and then go to the path of the folder ikmback then type this line
+pip install - r requirements.txt
 
-and rename the folder "client" instead of ikmFrontend
+# Ikm frontend repository, Windows installation 🙌 
+install node.js >= 17 in windows
+https://nodejs.org/es
 
-## run this line
+## 1. Clone the frontend repository
+Inside of the folder IKMWEB,
+clone the repository https://github.com/AntProRo/ikmfront.git
+
+## 2. Install dependencies
+Open the terminal and then go to the path of the folder ikmfront then type this line
 npm install
 
-## and finally
+# Docker database setUp 🙌 
+https://apx365-my.sharepoint.com/:u:/g/personal/anrodriguez_apexsystems_com/ETfu3M5vw-BGkSb_B6tUoWMBxh9NHoqU0bDWV8NdILYYAg
+Copy the file Docker-compose.yml to the root of IKMWEB folder
 
-npm build and then npm start 
+IKMWEB├── ikmfront
+      ├── ikmback
+      ├── Docker-compose.yml
 
-## Web page
+## 1. Build images
+Here we will know, if the backend and frontend dependencies are installed correctly
+but the most important step is  build the database.
 
-https://railway.app/project/e2f4cb1d-7d26-4120-a5fb-c74e2391f601/service/87996043-e129-4018-854d-df537d905283
+open the terminal and go inside of the folder IKMWEB and type
+1. docker-compose build
+--- if is completed ----
+2. docker-compose up
 
-local enviroment
-### `npm start`
+## The application must run successfully the frontend, backend and database containers
+✅ The browser will open automatically the localHost: http://localhost:3000/
+      
+# How to edit the project and see the changes❓❓
+Kill with ctrl C or stop all the containers then 
+(in docker-desktop app ), run only the db-1 container 
 
+## 1. Run the backend application
+Open terminal and go inside of the folder ikmback and type this line.
+python manage.py runserver 
 
-### if you have problems you could add  or change .env
+--- ✅ happy code ---
 
-REACT_APP_API_URL =  'http://localhost:8000'
-REACT_DEVELOPMENT_URL_PROXY_JS=  'http://127.0.0.1:8000' 
+## 2. Run the frontend application
+Open terminal and go inside of the folder ikmfront and type this line.
+npm start
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-
+--- ✅ happy code ---
