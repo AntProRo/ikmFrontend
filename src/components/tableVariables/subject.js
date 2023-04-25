@@ -34,6 +34,7 @@ const SubjectTable = ({
     updateSubject(body, idPractice);
   };
 
+  console.log(SubjectsAndPractice)
   return (
     <>
       <Form.Group as={Col} md="8" controlId="validationCustom02">

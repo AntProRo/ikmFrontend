@@ -13,8 +13,10 @@ import {
   updateCropDefault,
   getCropDefault,
   restoreStatus200,
+  getPracticesAndSubjects,
 } from "../actions/uploadPDF";
 import Swal from "sweetalert2";
+import SelectCrop from "./SelectCropBySubject";
 
 /* setCrop(width, height, aspect);
       height: 188.6666259765625,
@@ -34,6 +36,8 @@ const CropperImage = ({
   postAnalysisDocument,
   show,
   onHide,
+  /* GET SUBJECTS AND PRACTICES */
+  getPracticesAndSubjects,
   /* CROP OPTIONS */
   restoreStatus200,
   updateCropDefault,
@@ -115,8 +119,8 @@ const CropperImage = ({
         const newBlob = await base64Response.blob();
         const File = URL.createObjectURL(newBlob);
         setSrc(File);
-
         getCropDefault();
+        getPracticesAndSubjects();
       };
       convertShowImage();
     }
@@ -162,7 +166,6 @@ const CropperImage = ({
     restoreStatus200,
     statusSavedCrop,
   ]);
-
 
   const handleClose = () => {
     onHide();
@@ -278,6 +281,7 @@ const CropperImage = ({
                   onChange={(e) => setScale(e.target.value)}
                 />
               </div>
+              <SelectCrop />
             </div>
             <br />
 
@@ -366,6 +370,8 @@ const mapStateToProps = (state) => ({
   //Default crop Options
   cropDefault: state?.uploadDocument?.resCrop,
   statusSavedCrop: state?.uploadDocument?.res,
+  //GETS SUBJECT ADN PRACTOCES
+  SubjectsAndPractice: state?.uploadDocument?.processResult,
 });
 
 export default connect(mapStateToProps, {
@@ -377,4 +383,5 @@ export default connect(mapStateToProps, {
   updateCropDefault,
   getCropDefault,
   restoreStatus200,
+  getPracticesAndSubjects,
 })(CropperImage);
