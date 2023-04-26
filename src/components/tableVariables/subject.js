@@ -36,7 +36,7 @@ const SubjectTable = ({
 
   return (
     <>
-      <Form.Group as={Col} md="8" controlId="validationCustom02">
+      <Form.Group as={Col} md="12" controlId="validationCustom02">
         <Subject
           show={modalShowSubject}
           onHide={() => setModalShowSubject(false)}
@@ -49,7 +49,7 @@ const SubjectTable = ({
         </Button>
         <br />
         <br />
-        <Table striped bordered hover variant="dark">
+        <Table striped bordered hover variant="light">
           <thead>
             <tr>
               <th>Subject</th>

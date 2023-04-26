@@ -1,4 +1,4 @@
-import { Row } from "react-bootstrap";
+import { Tab, Tabs } from "react-bootstrap";
 import { connect } from "react-redux";
 import SubjectTable from "../components/tableVariables/subject";
 import PracticeTable from "../components/tableVariables/practice";
@@ -17,10 +17,18 @@ const Variables = () => {
         <p className="section__desc">
           Create new practices, subjects and skills for your analysis of IKM.
         </p>
-        <Row className="mb-3">
-          <PracticeTable />
-          <SubjectTable />
-        </Row>
+        <Tabs
+          defaultActiveKey="practice"
+          id="uncontrolled-tab-example"
+          className="mb-3"
+        >
+          <Tab eventKey="practice" title="Practice">
+            <PracticeTable />
+          </Tab>
+          <Tab eventKey="subject" title="Subject">
+            <SubjectTable />
+          </Tab>
+        </Tabs>
       </section>
     </>
   );
