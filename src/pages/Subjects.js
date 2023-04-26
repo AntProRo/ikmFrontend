@@ -88,7 +88,7 @@ const Subjects = ({
         })} 
       </tbody>
     </Table>
-    <Skill idToFind = {idToFind} show={modalShowSkill} onHide={() => setModalShowSkill(false)} />
+    <Skill idToFind = {idToFind} show={modalShowSkill} onHide={() => {setModalShowSkill(false); setIdToFind("")}} />
   </Form.Group>
 
 }
