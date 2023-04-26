@@ -34,10 +34,9 @@ const SubjectTable = ({
     updateSubject(body, idPractice);
   };
 
-  console.log(SubjectsAndPractice)
   return (
     <>
-      <Form.Group as={Col} md="8" controlId="validationCustom02">
+      <Form.Group as={Col} md="12" controlId="validationCustom02">
         <Subject
           show={modalShowSubject}
           onHide={() => setModalShowSubject(false)}

@@ -42,6 +42,8 @@ import {
   CROP_GET_SUCCESS,
   CROP_SAVE_FAIL,
   CROP_GET_FAIL,
+  CROP_SUBJECT_SUCCESS,
+  CROP_SUBJECT_FAIL,
 } from "../actions/types";
 
 const initialState = {
@@ -62,6 +64,7 @@ const initialState = {
     x: null,
     y: null,
   },
+  resCropSubject: null,
 };
 
 export default function uploadDocument(state = initialState, action) {
@@ -263,6 +266,19 @@ export default function uploadDocument(state = initialState, action) {
         ...state,
         resCrop: null,
       };
+
+    case CROP_SUBJECT_FAIL:
+      return {
+        ...state,
+        resCropSubject: "Fail_save_crop_subject",
+      };
+
+    case CROP_SUBJECT_SUCCESS:
+      return {
+        ...state,
+        resCropSubject: "saved",
+      };
+
     default:
       return state;
   }

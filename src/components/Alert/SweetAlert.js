@@ -12,6 +12,6 @@ return Swal.fire({
     text: `${message}`,
     icon: `${typeIcon}`,
     timer: `${timerToFinish}`,
-    confirmButtonText:`${confirmButtonText}`,
+    ...confirmButtonText && {confirmButtonText:`${ confirmButtonText }` }
   });
 };

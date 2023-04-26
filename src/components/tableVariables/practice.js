@@ -37,7 +37,6 @@ const PracticeTable = ({
   useEffect(() => {
     getPracticesAndSubjects();
     if (statusResultHTTP === "deleted_practice") {
-      getPracticesAndSubjects();
       activateAlert("Practice deleted!!!", "", "success", 1500);
     }
     if (statusResultHTTP === "fail_delete_practice") {
@@ -65,7 +64,7 @@ const PracticeTable = ({
 
   return (
     <>
-      <Form.Group as={Col} md="4" controlId="validationCustom02">
+      <Form.Group as={Col} md="12" controlId="validationCustom02">
         <Practice
           show={modalShowPractice}
           onHide={() => setModalShowPractice(false)}

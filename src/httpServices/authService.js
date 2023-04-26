@@ -95,6 +95,12 @@ export const adminService = () => {
     return put(url,body,"Cropped updated",{})
   }
 
+
+  const ApiSaveCropDefaultBySubject = (body,id) => {
+    const url =  `${process.env.REACT_APP_API_URL}/recruiter/saveSubjectCrop/${id}/`;
+    return put(url,body,"Cropped subject updated",{})
+  }
+
   const ApiGetCropDefault = () => {
     const url =  `${process.env.REACT_APP_API_URL}/recruiter/saveCrop/`;
     return get(url,"Get default crop")
@@ -122,6 +128,7 @@ export const adminService = () => {
     ApiGetCropDefault,
     ApiUpdatePractice, 
     ApiUpdateSubject,
-    ApiUpdateSkill
+    ApiUpdateSkill,
+    ApiSaveCropDefaultBySubject,
   };
 };

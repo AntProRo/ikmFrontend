@@ -43,6 +43,9 @@ import {
   CROP_GET_SUCCESS,
   CROP_SAVE_FAIL,
   CROP_GET_FAIL,
+
+  CROP_SUBJECT_FAIL,
+  CROP_SUBJECT_SUCCESS
 } from "./types";
 import { adminService } from "../httpServices/authService";
 const {
@@ -68,6 +71,7 @@ const {
   /* CROP */
   ApiSaveCropDefault,
   ApiGetCropDefault,
+  ApiSaveCropDefaultBySubject
 
 } = adminService();
 
@@ -465,3 +469,25 @@ export const updateCropDefault = (formData) => async (dispatch) => {
     });
   }
 };
+
+
+export const updateCropBySubjectDefault = (formData, id) => async (dispatch) => {
+  try {
+    const res = await ApiSaveCropDefaultBySubject(formData, id);
+    if (res.status !== 200) {
+      dispatch({
+        type:CROP_SUBJECT_FAIL,
+      });
+    } else {
+      dispatch({
+        type: CROP_SUBJECT_SUCCESS,
+        payload: res.data,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: CROP_SUBJECT_FAIL,
+    });
+  }
+};
+

@@ -14,16 +14,12 @@ import {
   getCropDefault,
   restoreStatus200,
   getPracticesAndSubjects,
+  updateCropBySubjectDefault,
 } from "../actions/uploadPDF";
 import Swal from "sweetalert2";
-import SelectCrop from "./SelectCropBySubject";
+import SelectCrop from "./Cropper/SelectCropBySubject";
+import ExampleCrop from "./Cropper/exampleCrop";
 
-/* setCrop(width, height, aspect);
-      height: 188.6666259765625,
-      unit: "px",
-      width : 218.00003051757812,
-      x : 252.56250762939453,
-      y : 338.3333740234375, */
 
 const CropperImage = ({
   SubjectResultImage,
@@ -44,6 +40,7 @@ const CropperImage = ({
   getCropDefault,
   cropDefault,
   statusSavedCrop,
+  updateCropBySubjectDefault,
 }) => {
   const imgRef = useRef(null);
   const [src, setSrc] = useState(null);
@@ -54,6 +51,11 @@ const CropperImage = ({
   const [scale, setScale] = useState(1);
   const [aspect] = useState();
 
+  const [cropBySubjectActivated,setCropBySubjectActivated] = useState(false)
+  const [cropBySubject,setCropBySubject] = useState(null);
+  const [idSubject, setIdSubject] = useState(null);
+
+
   function onImageLoad(e) {
     e.preventDefault();
     if (aspect) {
@@ -63,20 +65,6 @@ const CropperImage = ({
   }
 
   const defaultCrop = () => {
-    /*  setCrop({
-      height: 188.6666259765625,
-      unit: "px",
-      width: 218.00003051757812,
-      x: 252.56250762939453,
-      y: 338.3333740234375,
-    });
-    setCompletedCrop({
-      height: 188.6666259765625,
-      unit: "px",
-      width: 218.00003051757812,
-      x: 252.56250762939453,
-      y: 338.3333740234375,
-    }); */
     if (
       cropDefault.height != null &&
       cropDefault?.width != null &&
@@ -110,7 +98,22 @@ const CropperImage = ({
     }
   };
 
+  const OnOptionSelected =(e)=> {
+    setCropBySubject(e)
+  } 
+
+  const saveCropSubject =()=>{
+    const { height, width, x, y, unit } = completedCrop;
+      const body = { height, width, x, y, unit };
+
+  
+    updateCropBySubjectDefault(body,idSubject)
+  }
+
+  console.log(cropBySubject)
+
   useEffect(() => {
+
     if (SubjectResultImage !== null) {
       spinnerLoading(false);
       const convertShowImage = async () => {
@@ -123,6 +126,25 @@ const CropperImage = ({
         getPracticesAndSubjects();
       };
       convertShowImage();
+
+/*       if(cropBySubjectActivated){
+
+        setCrop({
+          height: cropDefault.height,
+          unit: cropDefault.unit,
+          width: cropDefault.width,
+          x: cropDefault.x,
+          y: cropDefault.y,
+        });
+        setCompletedCrop({
+          height: cropDefault.height,
+          unit: cropDefault.unit,
+          width: cropDefault.width,
+          x: cropDefault.x,
+          y: cropDefault.y,
+        });
+
+      } */
     }
 
     if (
@@ -165,10 +187,16 @@ const CropperImage = ({
     SubjectResultImage,
     restoreStatus200,
     statusSavedCrop,
+   
   ]);
+
+
+  /* console.log(cropBySubjectActivated,cropBySubject) */
+  console.log(idSubject)
 
   const handleClose = () => {
     onHide();
+    setCropBySubjectActivated(false)
   };
 
   function DataURIToBlob(dataURI) {
@@ -198,11 +226,9 @@ const CropperImage = ({
 
       restoreProcess(null);
       postAnalysisDocument(formData);
-
       handleClose();
       spinnerLoading(true);
-
-      /*      postDocument(formData);
+      /*  postDocument(formData);
       spinnerLoading(true);
       setModalShowResult(true); */
     } catch (err) {
@@ -219,6 +245,8 @@ const CropperImage = ({
       console.log(err);
     }
   };
+
+
 
   return (
     <Modal
@@ -237,35 +265,7 @@ const CropperImage = ({
             <Modal.Title>Crop the image </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div>
-              Example:
-              <div className="gridCrop">
-                <div>
-                  <img
-                    src="/example1.png"
-                    alt="example1"
-                    style={{
-                      border: "1.0px dashed #000",
-                      objectFit: "cover",
-                      height: "15rem",
-                      width: "15rem",
-                    }}
-                  />
-                </div>
-                <div>
-                  <img
-                    src="/example2.png"
-                    alt="example2"
-                    style={{
-                      border: "1.0px dashed #000",
-                      objectFit: "cover",
-                      height: "15rem",
-                      width: "15rem",
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
+            <ExampleCrop/>
             <hr className="hr hr-blurry" />
 
             <br />
@@ -281,10 +281,13 @@ const CropperImage = ({
                   onChange={(e) => setScale(e.target.value)}
                 />
               </div>
-              <SelectCrop />
+
+
+
+              <SelectCrop  idSubject ={idSubject}callback={OnOptionSelected} activated={(e)=>{setCropBySubjectActivated(e)}} setIdSubject={(e)=>{setIdSubject(e)}}/>
             </div>
             <br />
-
+        
             <div className="gridCrop">
               <div>
                 {src && (
@@ -322,13 +325,19 @@ const CropperImage = ({
                 )}
               </div>
             </div>
-
-            {/* <img src={`data:image/jpg;base64,${SubjectResult}`} alt="imageIKM" height={900} width={700}/> */}
           </Modal.Body>
         </>
       )}
 
       <Modal.Footer>
+      <Button
+          variant="danger"
+          disabled={completedCrop ? false : true}
+          onClick={saveCropSubject}
+        >
+          Save Crop as default subject
+        </Button>
+
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
@@ -384,4 +393,5 @@ export default connect(mapStateToProps, {
   getCropDefault,
   restoreStatus200,
   getPracticesAndSubjects,
+  updateCropBySubjectDefault,
 })(CropperImage);

@@ -40,7 +40,6 @@ const Practice = ({
       message:"",
       typeIcon:"success",
       timerToFinish:1500,
-      
       } 
       GlobalSweetAlert(alertActive)
     
